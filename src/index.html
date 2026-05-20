@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Most of this was pulled form the "html-5 boilerplate" extension -->
+    
+    <meta charset="utf-8">
+    <title>Omni-Combat</title>
+    <meta name="description" content="A turn-based combat game where players can choose from three different character classes, battle maps, and difficulties. The game boasts several enemy types, each trying to overcome the player.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/styles.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="heading">
+        <h1>Omni-Combat</h1>
+      </div>
+        <br>
+        
+      <div class="selecter">
+        <p>Choose your character:   </p>
+        <form class="character-select">
+          <!-- This is the first choice container, this is for the character selection -->
+          <!-- I'm not sure the div class="character-card" is necessary for each of the inputs and labels-->
+          <div class="character-options-container">
+            <div class="character-card">
+              <input type="radio" name="character" id="wizard_icon" value="1st_img">
+              <label for="wizard_icon"><img src="assets/Fighter.png" alt="Wizard Icon">Wizard</label>
+            </div>
+            <div class="character-card">
+              <input type="radio" name="character" id="fighter_icon" value="2nd_img">
+              <label for="fighter_icon"><img src="assets/Fighter.png" alt="Fighter Icon">Fighter</label> 
+            </div>
+            <div class="character-card">
+              <input type="radio" name="character" id="ranger_icon" value="3rd_img">
+              <label for="ranger_icon"><img src="assets/Fighter.png" alt="Ranger Icon">Ranger</label>  
+            </div>
+          </div>
+        </form>
+        <!-- This will be the next choice container, this will be for map selection -->
+        <!-- This will be the final choice container, this will be for difficulty selection -->
+      </div>
+    </div>
+    <a href="pages/forest.html"><button class="start-button">Start Game</button></a>
+    <script src="" async defer></script>
+  </body>
+</html>

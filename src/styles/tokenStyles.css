@@ -1,0 +1,17 @@
+#player {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  /* background-color: red; */
+  /* border-radius: 50%; */
+}
+
+#playerToken {
+  object-fit: contain;
+  height: 100%;
+  width: 100%;
+}

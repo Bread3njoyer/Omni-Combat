@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(86, 85, 85);
+    margin: 0;  
+    padding: 20px;
+}
+.selecter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* flex-direction: column; */
+}
+
+.heading {
+    text-align: center;
+}
+
+.character-options-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Space between options */
+}
+
+label {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Hide the radio button circles */
+input[type=radio] { 
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Style images to look clickable */
+input[type=radio] + label img {
+    /* cursor: pointer; */
+    border: 2px solid transparent;
+    width: 200px; 
+}
+
+
+input[type=radio]:checked + label img {
+    border-color: blue;
+    box-shadow: 0 0 10px rgba(0,0,255,0.5);
+}
