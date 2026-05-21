@@ -9,7 +9,11 @@ class Grid {
     }
 
     generateGrid() {
-        this.gridContainer = document.getElementById('grid-container');
+        this.gridContainer = document.querySelector('.grid-container');
+        if (!this.gridContainer) {
+            console.error('Grid container not found!');
+            return;
+        }
         for (let i = 0; i < this.rows * this.cols; i++) {
             const cell = document.createElement('div');
             cell.classList.add('grid-item');
