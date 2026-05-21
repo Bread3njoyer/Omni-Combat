@@ -5,10 +5,11 @@ class Grid {
     constructor() {
         this.rows = 0;
         this.cols = 0;
-        this.gridContainer = document.querySelector('.grid-container');
+        this.gridContainer = null;
     }
 
     generateGrid() {
+        this.gridContainer = document.getElementById('grid-container');
         for (let i = 0; i < this.rows * this.cols; i++) {
             const cell = document.createElement('div');
             cell.classList.add('grid-item');
