@@ -1,3 +1,6 @@
+/*I'm not sure if this needs to be in a "forestStyles" file, I think this might change later to a "gridStyles" file and become a bit more dynamic.*/
+/*A lot of these decisions will come after I've better implemented the grid system and learned a bit more about JS*/
+
 .game-container {
   display: flex;
   flex-direction: column;
@@ -22,7 +25,7 @@
   grid-template-columns: repeat(12,minmax(0, 1fr));
   grid-template-rows: repeat(8, minmax(0, 1fr));
 
-  width: 80vmin;
+  width: 100vmin;
   aspect-ratio: 3/2;
   /*This sets the background image directly in the cetner and tells the HTML not to repeat it (like the tiling)*/
   background: url("../assets/RoadsideWilderness.jpg") no-repeat center center;
