@@ -1,7 +1,6 @@
 // Not sure how to make this class work yet. I know I want to use it to both generate the grid and track both the player and the monsters.
 // I've currently got the grid being declared right away, then once the DOM content is loaded, I set the rows and cols, then generate the grid.
-// In the future, the event listener will be waiting for a button click so it can be used for several maps, but for now this is fine.
-
+// In the future, I'll have to figure out how to make the event listener get information from the previous page so it can be used for several maps and for each class.
 class Grid {
     constructor() {
         this.rows = 0;
@@ -37,6 +36,7 @@ class Player {
         this.health = health;
         this.position = position;
         this.token = this.createToken();
+        this.movementRange = 30;
     }
 
     createToken() {
@@ -50,6 +50,29 @@ class Player {
         playerToken.id = 'playerToken';
         player.appendChild(playerToken);
         return player;
+    }
+}
+
+// This isn't used right now and I'm not sure if I want to keep it this way.
+// I need to be able to track multiple monsters, but I'm not going to work on that yet.
+class Monster {
+    constructor(type, health, position, idNumber) {
+        this.type = type;
+        this.health = health;
+        this.position = position;
+        this.token = this.createToken(idNumber);
+    }
+
+    createToken(idNumber) {
+        const monster = document.createElement('div');
+        monster.id = `monster-${idNumber}`;
+        monster.classList.add('monster');
+        const monsterToken = document.createElement('img');
+        monsterToken.src = '../assets/MonsterToken.png';
+        monsterToken.alt = 'Monster Token';
+        monsterToken.id = `monsterToken-${idNumber}`;
+        monster.appendChild(monsterToken);
+        return monster;
     }
 }
 
