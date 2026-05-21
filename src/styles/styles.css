@@ -8,18 +8,26 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* flex-direction: column; */
+    flex-direction: column;
 }
 
 .heading {
     text-align: center;
 }
 
-.character-options-container {
+.options-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px; /* Space between options */
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid white;
 }
 
 label {
@@ -43,7 +51,6 @@ input[type=radio] + label img {
     border: 2px solid transparent;
     width: 200px; 
 }
-
 
 input[type=radio]:checked + label img {
     border-color: blue;

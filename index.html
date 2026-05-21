@@ -18,29 +18,65 @@
         
       <div class="selecter">
         <p>Choose your character:   </p>
-        <form class="character-select">
+        <form class="character-select" id="character-select">
           <!-- This is the first choice container, this is for the character selection -->
           <!-- I'm not sure the div class="character-card" is necessary for each of the inputs and labels-->
-          <div class="character-options-container">
+          <div class="options-container">
             <div class="character-card">
-              <input type="radio" name="character" id="wizard_icon" value="1st_img">
+              <input type="radio" name="character" id="wizard_icon" value="wizard">
               <label for="wizard_icon"><img src="./src/assets/Fighter.png" alt="Wizard Icon">Wizard</label>
             </div>
             <div class="character-card">
-              <input type="radio" name="character" id="fighter_icon" value="2nd_img">
+              <input type="radio" name="character" id="fighter_icon" value="fighter">
               <label for="fighter_icon"><img src="./src/assets/Fighter.png" alt="Fighter Icon">Fighter</label> 
             </div>
             <div class="character-card">
-              <input type="radio" name="character" id="ranger_icon" value="3rd_img">
+              <input type="radio" name="character" id="ranger_icon" value="ranger">
               <label for="ranger_icon"><img src="./src/assets/Fighter.png" alt="Ranger Icon">Ranger</label>  
             </div>
           </div>
         </form>
-        <!-- This will be the next choice container, this will be for map selection -->
-        <!-- This will be the final choice container, this will be for difficulty selection -->
       </div>
+      <!-- This will be the next choice container, this will be for map selection -->
+      <div class="selecter">
+      <p>Choose your map:   </p>
+      <form class="map-select" id="map-select">
+        <div class = "options-container">
+          <div class="map-card">
+            <input type="radio" name="map" id="forest_icon" value="forest">
+            <label for="forest_icon"><img src="./src/assets/Forest_icon.png" alt="Forest Icon">Forest</label>
+          </div>
+          <div class="map-card">
+            <input type="radio" name="map" id="city_icon" value="city">
+            <label for="city_icon"><img src="./src/assets/Forest_icon.png" alt="City Icon">City</label>
+          </div>
+          <div class="map-card">
+            <input type="radio" name="map" id="cave_icon" value="cave">
+            <label for="cave_icon"><img src="./src/assets/Forest_icon.png" alt="Cave Icon">Cave</label>
+          </div>
+        </div>
+      </form>
+      <!-- This will be the final choice container, this will be for difficulty selection -->
+      <div class="selecter">
+      <p>Choose your difficulty:   </p>
+      <form class="difficulty-select" id="difficulty-select">
+        <div class = "options-container">
+          <div class="difficulty-card">
+            <input type="radio" name="difficulty" id="loot_farm_icon" value="loot_farm">
+            <label for="loot_farm_icon"><img src="./src/assets/Forest_icon.png" alt="Loot Farm Icon">Loot Farm</label>
+          </div>
+          <div class="difficulty-card">
+            <input type="radio" name="difficulty" id="dungeon_icon" value="dungeon">
+            <label for="dungeon_icon"><img src="./src/assets/Forest_icon.png" alt="Dungeon Icon">Dungeon</label>
+          </div>
+          <div class="difficulty-card">
+            <input type="radio" name="difficulty" id="tpk_icon" value="tpk">
+            <label for="tpk_icon"><img src="./src/assets/Forest_icon.png" alt="TPK Icon">TPK 💀</label>
+          </div>
+        </div>
+      </form>
     </div>
-    <a href="./src/pages/forest.html"><button class="start-button">Start Game</button></a>
+    <button class="start-button" id="start-button">Start Game</button>
     <script src="./src/scripts/scripts.js" defer></script>
   </body>
 </html>

@@ -85,6 +85,7 @@ class Monster {
 let GRID = new Grid();
 
 // I'm not sure when I should leave this, probably after both the player and the monsters have been loaded and placed within the grid.
+// Need to add the functionality of reading the query params from the previous page to determine the size of grid, the player type, and the difficulty.
 document.addEventListener('DOMContentLoaded', () => {
     let rows = 8; // Number of rows in the grid
     let cols = 12 // Number of columns in the grid

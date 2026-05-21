@@ -28,7 +28,7 @@
   width: 100vmin;
   aspect-ratio: 3/2;
   /*This sets the background image directly in the cetner and tells the HTML not to repeat it (like the tiling)*/
-  background: url("../assets/RoadsideWilderness.jpg") no-repeat center center;
+  background: url("../assets/Forest_map.jpg") no-repeat center center;
   background-size: 100% 100%;
 
   /*This is just a border around the whole grid*/
