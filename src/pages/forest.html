@@ -18,13 +18,18 @@
         <div class="grid-container"> 
           <!-- This is where the grid will be generated -->
         </div>
-        <p>This is text</p>
+        <div class="controls">
+          <button id="moveBtn">Move</button>
+          <button id="attackBtn">Attack</button>
+          <button id="endTurnBtn">End Turn</button>
+          <p id="info-text" class="hidden"></p>
+          <button id="backBtn" class ="hidden">Back</button>
+        </div>
       </div>
     </div>
     <footer>
       <p>Map by 2-Minute Tabletop </p>
     </footer>
-    <script src="../scripts/forestScripts.js" defer></script>
-    <script src="../scripts/gridScripts.js" defer></script>
+    <script type="module" src="../scripts/gridScripts.js" defer></script>
   </body>
 </html>

@@ -18,6 +18,5 @@ document.getElementById('start-button').addEventListener('click', () => {
   let urlPrefix = window.location.origin + window.location.pathname.replace('index.html', '');
   // I'm using query params, not sure if this is better or worse than local storage but this should work.
   let urlFull = `${urlPrefix}src/pages/${selectedMap}.html?character=${selectedCharacter}&difficulty=${selectedDifficulty}`;
-  console.log(urlFull);
   window.location.href = urlFull;
 });
