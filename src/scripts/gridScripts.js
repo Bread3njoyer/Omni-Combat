@@ -1,7 +1,10 @@
-// Not sure how to make this class work yet. I know I want to use it to both generate the grid and track both the player and the monsters.
-// I've currently got the grid being declared right away, then once the DOM content is loaded, I set the rows and cols, then generate the grid.
-// In the future, I'll have to figure out how to make the event listener get information from the previous page so it can be used for several maps and for each class.
-class GameState {
+import {createForestActors} from './forestScripts.js';
+// import {createCaveActors} from './caveScripts.js';
+// import {createColiActors} from './coliseumScripts.js';
+// import {Monster} from './monsterScripts.js';
+// import {Player} from './playerScripts.js';
+
+export class GameState {
   constructor() {
     this.rows = 0;
     this.cols = 0;
@@ -34,48 +37,30 @@ class GameState {
       });
       this.gridContainer.appendChild(cell);
     }
-    let usedX = [0];
-    let usedY = [3];
-    let playerPosition = {
-    y : 3,
-    x : 0
-    };
-    let player = new Player(character, 100, playerPosition);
-    GAMESTATE.addToken(player);
-    this.currentActor = player;
-    this.playerActor = player;
-    var num_monsters = 0
-    switch (difficulty) {
-      case "loot_farm":
-        num_monsters = 2;
+
+    //Right here I will run forest scripts, cave scripts, etc.
+    switch (map) {
+      case 'forest':
+        var actors = createForestActors(character, difficulty);
         break;
-      case "dungeon":
-        num_monsters = 3;
+      case 'cave':
+        var actors = createCaveActors(character, difficulty);
         break;
-      case "tpk":
-        num_monsters = 5;
+      case 'coliseum':
+        var actors = createColiActors(character, difficulty);
         break;
       default:
-        num_monsters = 1;
+        var actors = [];
         break;
     }
-    for (let i = 0; i < num_monsters; i++ ) {
-      do {
-        var x = Math.floor(Math.random() * (this.cols - 1) + 1);
-      } while (usedX.includes(x));
-      do {
-        var y = Math.floor(Math.random() * (this.rows - 1) + 1);
-      } while (usedY.includes(y));
-      usedX.push(x);
-      usedY.push(y);
-      let monsterPosition = {
-        x : x,
-        y : y
-      };
-      let monster = new Monster(map, 100, monsterPosition, i+1);
-      GAMESTATE.addToken(monster);
-      GAMESTATE.monsters.push(monster);
-    }
+    this.playerActor = actors[0];
+    this.currentActor = this.playerActor;
+    actors.forEach((actor, index) => {
+        GAMESTATE.addToken(actor);
+        if (index != 0) {
+          GAMESTATE.monsters.push(actor);
+        }
+    });
   }
 
   indexToCell(position) {
@@ -94,10 +79,10 @@ class GameState {
     };
     return position;
   }
-  // Change params to just a player or monster object.
+
   addToken(actor) {
     const cell = this.indexToCell(actor.position)
-    console.log(cell);
+    // console.log(cell);
     if (cell) {
       cell.appendChild(actor.token);
     } else {
@@ -112,8 +97,8 @@ class GameState {
   }
 
   getPossibleMoves(actor) {
-    var range = (actor.movementRange / 5);
-    if (range == 0) {
+    var range = actor.movementRange;
+    if (range === 0) {
       return [];
     }
     var moves = []
@@ -135,7 +120,7 @@ class GameState {
   }
 
   getPossibleAttacks(actor) {
-    var range = (actor.attackRange / 5);
+    var range = actor.attackRange;
     var attacks = []
     for (let i = 0; i < this.cols; i++ ) {
       for (let j = 0; j < this.rows; j++) {
@@ -161,10 +146,10 @@ class GameState {
     var classToggle = "";
     var actionPos = [];
     var actor = this.currentActor;
-    if (actionType == "move") {
+    if (actionType === "move") {
       actionPos = this.getPossibleMoves(actor);
       classToggle = "available-move";
-    } else if (actionType == "attack") {
+    } else if (actionType === "attack") {
       actionPos = this.getPossibleAttacks(actor);
       classToggle = "available-attack";
     }
@@ -178,9 +163,13 @@ class GameState {
 
   takeAction(action, targetCell) {
     this.toggleActions(action);
-    if (action == 'move') {
+    if (action === 'move') {
       this.move(targetCell);
-    } else if (action == 'attack') {
+    } else if (action === 'attack') {
+      this.toggleActions(action);
+      CONTROLWINDOW.classList.toggle('info');
+      INFOTEXT.textContent = ``;
+      toggleUI();
       this.attack(targetCell);
     }
   }
@@ -197,7 +186,9 @@ class GameState {
     var target = this.monsters[targetIdNum-1];
     var damage = actor.attackDamage[Math.floor(Math.random() * actor.attackDamage.length)];
     target.health -= damage;
+    // check if monster hp < 1, if so delete token.
     console.log(target.health, damage);
+    this.toggleActions('attack');
   }
 
   //need to take in actor who is moving and target location
@@ -206,118 +197,21 @@ class GameState {
     targetCell.appendChild(actor.token);
     var targetPos = this.cellToIndex(targetCell);
     var distanceTraveled = Math.floor(this.chebyshevDistance(actor.position, targetPos));
-    console.log(distanceTraveled);
+    // console.log(distanceTraveled);
     actor.position = targetPos;
-    actor.movementRange -= distanceTraveled * 5;
+    actor.movementRange -= distanceTraveled;
     this.toggleActions('move');
   }
 
   endTurn() {
     var actor = this.currentActor;
-    actor.movementRange = 20;
+    actor.movementRange = 4;
     this.attackUsed = false;
   }
   
 }
 
-//Not sure what to put in the player class yet, I need to track player type, health, and position at any given time, but I don't know what else I want in this class.
-class Player {
-  constructor(type, health, position) {
-    this.type = type;
-    this.health = health;
-    this.position = position;
-    this.token = this.createToken();
-    this.movementRange = 20;
-    if (this.type == "ranger") {
-      this.attackRange = 30;
-      this.attackDamage = [4, 5, 6, 7, 8, 9, 10, 11];
-    } else if (this.type == "wizard") {
-      this.attackRange = 15;
-      this.attackDamage = [7, 8, 9, 10, 11, 12, 13, 14];
-    } else if (this.type == "fighter") {
-      this.attackRange = 5;
-      this.attackDamage = [10, 11, 12, 13, 14, 15, 16, 17];
-    }
-  }
 
-  createToken() {
-    const player = document.createElement('div');
-    player.id = 'player';
-    player.classList.add('player');
-    const playerToken = document.createElement('img');
-    playerToken.id = 'playerToken';
-    switch (this.type) {
-      case 'fighter':
-        playerToken.src = '../assets/characters/Fighter_token.png';
-        playerToken.alt = 'Fighter Token';
-        break;
-      case 'ranger':
-        playerToken.src = '../assets/characters/Ranger_token.png';
-        playerToken.alt = 'Ranger Token';
-        break;
-      case 'wizard':
-        playerToken.src = '../assets/characters/Wizard_token.png';
-        playerToken.alt = 'Wizard Token';
-        break;
-      default:
-        console.error('Unknown player type:', this.type);
-        break;
-    }
-    player.appendChild(playerToken);
-    return player;
-  }
-}
-
-// This isn't used right now and I'm not sure if I want to keep it this way.
-// I need to be able to track multiple monsters, but I'm not going to work on that yet.
-class Monster {
-  constructor(map, health, position, idNumber) {
-    this.health = health;
-    this.position = position;
-    this.idNumber = idNumber;
-    if (map == "forest") {
-      this.type = "wolf";
-    } else if (map == "cave") {
-      this.type = "goblin";
-    } else if (map == "coliseum") {
-      this.type = "minotaur";
-    }
-    this.token = this.createToken(idNumber);
-  }
-
-  createToken() {
-    const monster = document.createElement('div');
-    monster.id = `monster-${this.idNumber}`;
-    monster.classList.add('monster');
-    const monsterToken = document.createElement('img');
-    monsterToken.id = `monsterToken-${this.idNumber}`;
-    monsterToken.classList.add("monster-token");
-    switch (this.type) {
-      case 'goblin':
-        monsterToken.src = '../assets/monsters/Goblin_token.png';
-        monsterToken.alt = 'Goblin Token';
-        break;
-      case 'wolf':
-        monsterToken.src = '../assets/monsters/Wolf_token.png';
-        monsterToken.alt = 'Wolf Token';
-        break;
-      case 'minotaur':
-        monsterToken.src = '../assets/monsters/Minotaur_token.png';
-        monsterToken.alt = 'Minotaur Token';
-        break;
-      default:
-        console.error('Unknown player type:', this.type);
-        break;
-    }
-    monster.appendChild(monsterToken);
-    return monster;
-  }
-
-  //Take turn method
-}
-
-
-// kind of clunky but this should work correctly
 function toggleUI() {
   document.getElementById('moveBtn').classList.toggle('hidden');
   document.getElementById('attackBtn').classList.toggle('hidden');
@@ -329,9 +223,10 @@ function toggleUI() {
 
 //Apparently common convention is to use all caps for the global variable.
 let GAMESTATE = new GameState();
+window.GAMESTATE = GAMESTATE;
+const CONTROLWINDOW = document.querySelector('.controls');
+const INFOTEXT = document.getElementById('info-text');
 
-// I'm not sure when I should leave this, probably after both the player and the monsters have been loaded and placed within the grid.
-// Need to add the functionality of reading the query params from the previous page to determine the size of grid, the player type, and the difficulty.
 document.addEventListener('DOMContentLoaded', () => {
   // Reading query params
   const urlParams = new URLSearchParams(window.location.search);
@@ -341,12 +236,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const mapName = path.slice(path.lastIndexOf('/') + 1).slice(0, -5);
   let rows = 0;
   let cols = 0;
-  if (mapName == "forest") {
+  if (mapName === "forest") {
     rows = 8; // Number of rows in the grid
     cols = 12 // Number of columns in the grid
-  } else if (mapName == "cave") {
+  } else if (mapName === "cave") {
 
-  } else if (mapName == "coliseum") {
+  } else if (mapName === "coliseum") {
 
   }
   GAMESTATE.rows = rows;
@@ -357,36 +252,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const attackBtn = document.getElementById('attackBtn');
   const endTurnBtn = document.getElementById('endTurnBtn');
   const backBtn = document.getElementById('backBtn');
-  const controlWindow = document.querySelector('.controls');
-  const infoText = document.getElementById('info-text');
+
 
   moveBtn.addEventListener("click", () => {
-    console.log("move button pressed");
     GAMESTATE.toggleActions('move');
-    controlWindow.classList.toggle('info');
-    infoText.textContent = `Press any of the green tiles to move your token there!
+    CONTROLWINDOW.classList.toggle('info');
+    INFOTEXT.textContent = `Press any of the green tiles to move your token there!
                             If you don't want to move yet, press the back button.`;
     toggleUI();
   });
   attackBtn.addEventListener('click', () => {
-    console.log("attack button pressed");
-    // add if logic for when attack is used or not used
-    GAMESTATE.toggleActions('attack');
-    controlWindow.classList.toggle('info');
-    infoText.textContent = `Press any of the red tiles to attack the monster there!
-                            If you don't want to attack yet, press the back button.`;
-    toggleUI();
+    if (GAMESTATE.attackUsed === true) {
+      CONTROLWINDOW.classList.toggle('info');
+      INFOTEXT.textContent = `You've used your attack this turn.
+                              You'll get another during your next turn.`;
+      toggleUI();
+    } else {
+      GAMESTATE.toggleActions('attack');
+      CONTROLWINDOW.classList.toggle('info');
+      INFOTEXT.textContent = `Press any of the red tiles to attack the monster there!
+                              If you don't want to attack yet, press the back button.`;
+      toggleUI();
+    }
   });
   endTurnBtn.addEventListener('click', () => {
     GAMESTATE.endTurn();
-    // GAMESTATE.monsters.forEach((monster) => {
-    //   monster.takeTurn();
-    // });
+    GAMESTATE.monsters.forEach((monster) => {
+      GAMESTATE.currentAction = null;
+      GAMESTATE.currentActor = monster;
+      monster.takeTurn();
+    });
+
   });
   backBtn.addEventListener('click', () => {
-    GAMESTATE.toggleActions(GAMESTATE.currentAction);
-    controlWindow.classList.toggle('info');
-    infoText.textContent = ``;
+    if (GAMESTATE.attackUsed != true) {
+      GAMESTATE.toggleActions(GAMESTATE.currentAction);
+    }
+    GAMESTATE.currentAction = null;
+    CONTROLWINDOW.classList.toggle('info');
+    INFOTEXT.textContent = ``;
     toggleUI();
   });
 
