@@ -51,5 +51,5 @@ export function createForestActors(character, difficulty) {
     actors.push(monster);
   }
 
-  return actors;
+  return [actors, num_wolves];
 }

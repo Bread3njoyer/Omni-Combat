@@ -1,6 +1,58 @@
 /*I'm not sure if this needs to be in a "forestStyles" file, I think this might change later to a "gridStyles" file and become a bit more dynamic.*/
 /*A lot of these decisions will come after I've better implemented the grid system and learned a bit more about JS*/
 
+.info-container {
+  background-color: rgb(0, 75, 0);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.combat-log {
+  color: lightgray;
+  font-family: "Papyrus";
+  text-align: left;
+  font-size: 1vw;
+}
+
+.player-info {
+  color: lightgray;
+  font-family: "Papyrus";
+  text-align: center;
+  font-size: 1vw;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centers the box perfectly */
+  background-color: rgba(100,100,100,.95);
+  padding: 20px;
+  border-radius: 8px;
+  width: 75vmin;
+  aspect-ratio: 3/2;
+  text-align: center;
+}
+.modal-content button {
+  flex: 1;
+  padding: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: "Papyrus";
+}
+
 .game-container {
   display: flex;
   flex-direction: column;

@@ -13,59 +13,41 @@ export class GameState {
     this.currentActor = null;
     this.currentAction =  '';
     this.monsters = [];
+    this.monsterCount = 0;
+    this.deadMonsters = 0;
     this.attackUsed = false;
   }
 
-  generateGrid(character, difficulty, map) {
-    this.gridContainer = document.querySelector('.grid-container');
-    if (!this.gridContainer) {
-      console.error('Grid container not found!');
-      return;
-    }
-    for (let i = 0; i < this.rows * this.cols; i++) {
-      const cell = document.createElement('div');
-      cell.classList.add('grid-item');
-      cell.classList.add('no-action');
-      cell.id = `cell-${i}`; // Assigning an ID to each cell for easy reference.
-      // I need to add the relevant methods and possibilities before I can make the event listeneners work.
-      cell.addEventListener('click', () => {
-        if (cell.classList.contains("available-move")) {
-          this.takeAction('move', cell);
-        } else if (cell.classList.contains("available-attack")) {
-          this.takeAction('attack', cell);
-        }
-      });
-      this.gridContainer.appendChild(cell);
+  attack(targetCell) {
+    this.attackUsed = true;
+    var actor = this.currentActor;
+    var targetPos = this.cellToIndex(targetCell);
+    var targetId = targetCell.querySelector('.monster').id;
+    var targetIdNum = parseInt(targetId.substring(targetId.indexOf('-') + 1), 10);
+    var target = this.monsters[targetIdNum-1];
+    var damage = actor.attackDamage[Math.floor(Math.random() * actor.attackDamage.length)];
+    target.health -= damage;
+    this.generateCombatLogEntry(actor.type, `${target.type} ${target.idNumber}`, damage);
+    this.toggleActions('attack');
+    if (target.health <= 0) {
+      this.removeToken(target);
+      this.deadMonsters++;
+      this.monsters[targetIdNum-1] = 'dead';
+      if (this.deadMonsters === this.monsterCount) {
+        this.triggerWin();
+      }
     }
 
-    //Right here I will run forest scripts, cave scripts, etc.
-    switch (map) {
-      case 'forest':
-        var actors = createForestActors(character, difficulty);
-        break;
-      case 'cave':
-        var actors = createCaveActors(character, difficulty);
-        break;
-      case 'coliseum':
-        var actors = createColiActors(character, difficulty);
-        break;
-      default:
-        var actors = [];
-        break;
-    }
-    this.playerActor = actors[0];
-    this.currentActor = this.playerActor;
-    actors.forEach((actor, index) => {
-        GAMESTATE.addToken(actor);
-        if (index != 0) {
-          GAMESTATE.monsters.push(actor);
-        }
-    });
   }
 
-  indexToCell(position) {
-    const cellIndex = position.y * this.cols + position.x;
-    return document.getElementById(`cell-${cellIndex}`);
+  addToken(actor) {
+    const cell = this.indexToCell(actor.position)
+    // console.log(cell);
+    if (cell) {
+      cell.appendChild(actor.token);
+    } else {
+      console.error('Invalid position for token:', actor.position);
+    }
   }
 
   cellToIndex(cell) {
@@ -80,20 +62,93 @@ export class GameState {
     return position;
   }
 
-  addToken(actor) {
-    const cell = this.indexToCell(actor.position)
-    // console.log(cell);
-    if (cell) {
-      cell.appendChild(actor.token);
-    } else {
-      console.error('Invalid position for token:', actor.position);
-    }
-  }
-
   chebyshevDistance(startPos, endPos) {
     var p1 = Math.abs(startPos.x - endPos.x);
     var p2 = Math.abs(startPos.y - endPos.y);
     return Math.max(p1, p2);
+  }
+
+  endTurn() {
+    var actor = this.currentActor;
+    actor.movementRange = 4;
+    this.attackUsed = false;
+  }
+
+  generateCombatLogEntry(attacker, attackie, damage) {
+    const oldEntry = COMBATLOG.querySelector('.active');
+    oldEntry.classList.remove('active');
+    const entry = document.createElement('p');
+    entry.classList.add('active');
+    entry.textContent = `${attacker} did ${damage} damage to ${attackie}`;
+    COMBATLOG.appendChild(entry);
+  }
+
+  generateGrid(character, difficulty, map) {
+    this.gridContainer = document.querySelector('.grid-container');
+    if (!this.gridContainer) {
+      console.error('Grid container not found!');
+      return;
+    }
+    for (let i = 0; i < this.rows * this.cols; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('grid-item');
+      cell.classList.add('no-action');
+      cell.id = `cell-${i}`; // Assigning an ID to each cell for easy reference.
+      cell.addEventListener('click', () => {
+        if (cell.classList.contains("available-move")) {
+          this.takeAction('move', cell);
+        } else if (cell.classList.contains("available-attack")) {
+          this.takeAction('attack', cell);
+        }
+      });
+      this.gridContainer.appendChild(cell);
+    }
+
+    switch (map) {
+      case 'forest':
+        var [actors, numMonsters] = createForestActors(character, difficulty);
+        break;
+      case 'cave':
+        var [actors, numMonsters] = createCaveActors(character, difficulty);
+        break;
+      case 'coliseum':
+        var [actors, numMonsters] = createColiActors(character, difficulty);
+        break;
+      default:
+        var [actors, numMonsters] = [[], 0];
+        break;
+    }
+    this.monsterCount = numMonsters;
+    this.playerActor = actors[0];
+    this.currentActor = this.playerActor;
+    actors.forEach((actor, index) => {
+        GAMESTATE.addToken(actor);
+        if (index != 0) {
+          GAMESTATE.monsters.push(actor);
+        }
+    });
+  }
+
+  getPossibleAttacks(actor) {
+    var range = actor.attackRange;
+    var attacks = []
+    for (let i = 0; i < this.cols; i++ ) {
+      for (let j = 0; j < this.rows; j++) {
+        let location = {
+          x : i,
+          y : j
+        };
+        if (this.chebyshevDistance(actor.position, location) <= range) {
+          const cell = this.indexToCell(location);
+          if (actor.type != 'monster' && cell.querySelector('.monster')) {
+            attacks.push(location);
+          } else if (cell.querySelector('player')) {
+            attacks.push(location);
+          }
+        }
+      }
+    }
+    return attacks;
   }
 
   getPossibleMoves(actor) {
@@ -119,26 +174,41 @@ export class GameState {
     return moves;
   }
 
-  getPossibleAttacks(actor) {
-    var range = actor.attackRange;
-    var attacks = []
-    for (let i = 0; i < this.cols; i++ ) {
-      for (let j = 0; j < this.rows; j++) {
-        let location = {
-          x : i,
-          y : j
-        };
-        if (this.chebyshevDistance(actor.position, location) <= range) {
-          const cell = this.indexToCell(location);
-          if (actor.type != 'monster' && cell.querySelector('.monster')) {
-            attacks.push(location);
-          } else if (cell.querySelector('player')) {
-            attacks.push(location);
-          }
-        }
+  indexToCell(position) {
+    const cellIndex = position.y * this.cols + position.x;
+    return document.getElementById(`cell-${cellIndex}`);
+  }
+
+  move(targetCell) {
+    var actor = this.currentActor;
+    targetCell.appendChild(actor.token);
+    var targetPos = this.cellToIndex(targetCell);
+    var distanceTraveled = Math.floor(this.chebyshevDistance(actor.position, targetPos));
+    actor.position = targetPos;
+    actor.movementRange -= distanceTraveled;
+    this.toggleActions('move');
+  }
+
+  removeToken(actor) {
+    const cell = this.indexToCell(actor.position);
+      if (cell) {
+        cell.replaceChildren();
+      } else {
+        console.error('No token present at ', cell);
       }
+  }
+
+  takeAction(action, targetCell) {
+    this.toggleActions(action);
+    if (action === 'move') {
+      this.move(targetCell);
+    } else if (action === 'attack') {
+      this.toggleActions(action);
+      CONTROLWINDOW.classList.toggle('info');
+      INFOTEXT.textContent = ``;
+      toggleUI();
+      this.attack(targetCell);
     }
-    return attacks;
   }
 
   toggleActions(actionType) {
@@ -161,56 +231,19 @@ export class GameState {
     });
   }
 
-  takeAction(action, targetCell) {
-    this.toggleActions(action);
-    if (action === 'move') {
-      this.move(targetCell);
-    } else if (action === 'attack') {
-      this.toggleActions(action);
-      CONTROLWINDOW.classList.toggle('info');
-      INFOTEXT.textContent = ``;
-      toggleUI();
-      this.attack(targetCell);
-    }
+  triggerLoss() {
+    togglePopup(document.getElementById('popup-modal-loss'));
   }
 
-  //need to take in location of target and actor who is attacking
-  attack(targetCell) {
-    this.attackUsed = true;
-    var actor = this.currentActor;
-    var targetPos = this.cellToIndex(targetCell);
-    // This should get just the id nuum
-
-    var targetId = targetCell.querySelector('.monster').id;
-    var targetIdNum = parseInt(targetId.substring(targetId.indexOf('-') + 1), 10);
-    var target = this.monsters[targetIdNum-1];
-    var damage = actor.attackDamage[Math.floor(Math.random() * actor.attackDamage.length)];
-    target.health -= damage;
-    // check if monster hp < 1, if so delete token.
-    console.log(target.health, damage);
-    this.toggleActions('attack');
-  }
-
-  //need to take in actor who is moving and target location
-  move(targetCell) {
-    var actor = this.currentActor;
-    targetCell.appendChild(actor.token);
-    var targetPos = this.cellToIndex(targetCell);
-    var distanceTraveled = Math.floor(this.chebyshevDistance(actor.position, targetPos));
-    // console.log(distanceTraveled);
-    actor.position = targetPos;
-    actor.movementRange -= distanceTraveled;
-    this.toggleActions('move');
-  }
-
-  endTurn() {
-    var actor = this.currentActor;
-    actor.movementRange = 4;
-    this.attackUsed = false;
+  triggerWin() {
+    togglePopup(document.getElementById('popup-modal-win'));
   }
   
 }
 
+function togglePopup(modal) {
+  modal.style.display = (modal.style.display === "block") ? "none" : "block";
+}
 
 function toggleUI() {
   document.getElementById('moveBtn').classList.toggle('hidden');
@@ -226,6 +259,7 @@ let GAMESTATE = new GameState();
 window.GAMESTATE = GAMESTATE;
 const CONTROLWINDOW = document.querySelector('.controls');
 const INFOTEXT = document.getElementById('info-text');
+const COMBATLOG = document.querySelector('.combat-log');
 
 document.addEventListener('DOMContentLoaded', () => {
   // Reading query params
@@ -252,6 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const attackBtn = document.getElementById('attackBtn');
   const endTurnBtn = document.getElementById('endTurnBtn');
   const backBtn = document.getElementById('backBtn');
+  const restartBtns = document.querySelectorAll('.restartBtn');
+  const returnBtns = document.querySelectorAll('.returnBtn');
 
 
   moveBtn.addEventListener("click", () => {
@@ -279,9 +315,12 @@ document.addEventListener('DOMContentLoaded', () => {
     GAMESTATE.endTurn();
     GAMESTATE.monsters.forEach((monster) => {
       GAMESTATE.currentAction = null;
-      GAMESTATE.currentActor = monster;
-      monster.takeTurn();
+      if (monster !== 'dead') {
+        GAMESTATE.currentActor = monster;
+        setTimeout(monster.takeTurn(), 500);
+      }
     });
+    GAMESTATE.currentActor = GAMESTATE.playerActor;
 
   });
   backBtn.addEventListener('click', () => {
@@ -293,6 +332,16 @@ document.addEventListener('DOMContentLoaded', () => {
     INFOTEXT.textContent = ``;
     toggleUI();
   });
-
+  restartBtns.forEach(button => {
+    button.addEventListener('click', () => {
+      window.location.reload();
+    });
+  });
+  returnBtns.forEach(button => {
+    button.addEventListener('click', () => {
+      let urlPrefix = window.location.origin + window.location.pathname.replace(`/src/pages/${mapName}.html`, '/index.html');
+      window.location.href = urlPrefix;
+    });
+  });
 });
 
