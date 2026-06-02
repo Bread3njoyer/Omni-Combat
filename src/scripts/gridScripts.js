@@ -1,8 +1,6 @@
 import {createForestActors} from './forestScripts.js';
-// import {createCaveActors} from './caveScripts.js';
-// import {createColiActors} from './coliseumScripts.js';
-// import {Monster} from './monsterScripts.js';
-// import {Player} from './playerScripts.js';
+import {createCaveActors, createCaveWalls} from './caveScripts.js';
+import {createColiActors, createColiWalls} from './coliseumScripts.js';
 
 export class GameState {
   constructor() {
@@ -21,7 +19,6 @@ export class GameState {
   attack(targetCell) {
     this.attackUsed = true;
     var actor = this.currentActor;
-    var targetPos = this.cellToIndex(targetCell);
     var targetId = targetCell.querySelector('.monster').id;
     var targetIdNum = parseInt(targetId.substring(targetId.indexOf('-') + 1), 10);
     var target = this.monsters[targetIdNum-1];
@@ -70,6 +67,7 @@ export class GameState {
 
   endTurn() {
     var actor = this.currentActor;
+    PLAYERMOVEMENT.textContent = 4;
     actor.movementRange = 4;
     this.attackUsed = false;
   }
@@ -110,9 +108,11 @@ export class GameState {
         break;
       case 'cave':
         var [actors, numMonsters] = createCaveActors(character, difficulty);
+        var wallLocations = createCaveWalls();
         break;
       case 'coliseum':
         var [actors, numMonsters] = createColiActors(character, difficulty);
+        var wallLocations = createColiWalls();
         break;
       default:
         var [actors, numMonsters] = [[], 0];
@@ -186,6 +186,7 @@ export class GameState {
     var distanceTraveled = Math.floor(this.chebyshevDistance(actor.position, targetPos));
     actor.position = targetPos;
     actor.movementRange -= distanceTraveled;
+    PLAYERMOVEMENT.textContent = actor.movementRange;
     this.toggleActions('move');
   }
 
@@ -259,7 +260,10 @@ let GAMESTATE = new GameState();
 window.GAMESTATE = GAMESTATE;
 const CONTROLWINDOW = document.querySelector('.controls');
 const INFOTEXT = document.getElementById('info-text');
-const COMBATLOG = document.querySelector('.combat-log');
+const COMBATLOG = document.querySelector('.log');
+const PLAYERHEALTH = document.getElementById('player-health');
+window.PLAYERHEALTH = PLAYERHEALTH;
+const PLAYERMOVEMENT = document.getElementById('player-movement');
 
 document.addEventListener('DOMContentLoaded', () => {
   // Reading query params
@@ -271,12 +275,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let rows = 0;
   let cols = 0;
   if (mapName === "forest") {
-    rows = 8; // Number of rows in the grid
-    cols = 12 // Number of columns in the grid
+    rows = 8; 
+    cols = 12 
   } else if (mapName === "cave") {
-
+    rows = 10;
+    cols = 15;
   } else if (mapName === "coliseum") {
-
+    rows = 10;
+    cols = 10;
   }
   GAMESTATE.rows = rows;
   GAMESTATE.cols = cols;

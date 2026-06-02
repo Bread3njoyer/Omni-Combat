@@ -22,7 +22,6 @@ export class Monster {
         this.type = 'goblin';
         this.health = 20;
         this.attackRange = 3;
-        this.attackDamage = [3,4,5,6,7,8];
         this.movementRange = 3;
         break;
       case 'coliseum':
@@ -35,7 +34,7 @@ export class Monster {
       default:
         break;
     }
-    this.token = this.createToken(idNumber);
+    this.token = this.createToken();
   }
 
   createToken() {
@@ -170,6 +169,8 @@ export class Monster {
     if (window.GAMESTATE.chebyshevDistance(this.position, player.position) <= range) {
       var damage = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
       player.health -= damage;
+      console.log(player.health);
+      window.PLAYERHEALTH.textContent = player.health;
       if (player.health <= 0) {
         window.GAMESTATE.triggerLoss();
       }
@@ -179,3 +180,4 @@ export class Monster {
   }
 
 }
+

@@ -9,13 +9,18 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../styles/forestStyles.css">
-    <link rel="stylesheet" href="../styles/tokenStyles.css">
+    <link rel="stylesheet" href="../styles/gridStyles.css">
   </head>
   <body>
     <div class="info-container">
       <div class="player-info">
           <h1>Player Info</h1>
-            <!-- Not sure what I this should be yet.-->
+          <img id="character-portrait" src="" alt="">
+          <label for="character-portrait" id="portrait-label" ></label>
+          <h4>Health: </h4> <p id="player-health"></p>
+          <h4>Damage: </h4><p id="player-damage"></p>
+          <h4>Movement: </h4><p id="player-movement">4</p>
+          <h4>Range: </h4><p id="player-range"></p>
       </div> 
       <div class="game-container">
         <h1>Tokens & Tarrasques - Forest</h1>
@@ -34,7 +39,10 @@
         </div>
       </div>
       <div class="combat-log">
-        <h1 class="active">Combat Log</h1>
+        <h1>Combat Log</h1>
+        <div class="log">
+          <p class="active"></p>
+        </div>
       </div> 
     </div>
 

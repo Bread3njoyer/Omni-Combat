@@ -27,7 +27,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 2px solid white;
+    /* border: 2px solid white; */
 }
 
 label {
@@ -55,4 +55,8 @@ input[type=radio] + label img {
 input[type=radio]:checked + label img {
     border-color: blue;
     box-shadow: 0 0 10px rgba(0,0,255,0.5);
+}
+
+footer a {
+    color: black;
 }
