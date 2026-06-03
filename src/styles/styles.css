@@ -1,62 +1,87 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: rgb(86, 85, 85);
-    margin: 0;  
-    padding: 20px;
-}
-.selecter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  font-family: "papyrus";
+  background-color: rgb(60, 60, 60);
+  margin: 0;  
+  padding: 20px;
+  color: whitesmoke;
 }
 
-.heading {
-    text-align: center;
+h1 {
+  font-size: xx-large;
 }
 
-.options-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; /* Space between options */
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* border: 2px solid white; */
+p {
+  font-size: x-large;
 }
 
 label {
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  font-size: large;
 }
 
-/* Hide the radio button circles */
+button {
+  flex: 1;
+  padding: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: "Papyrus";
+}
+
+.selecter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.heading {
+  text-align: center;
+}
+
+.options-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; 
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+label {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 input[type=radio] { 
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-/* Style images to look clickable */
+
 input[type=radio] + label img {
-    /* cursor: pointer; */
-    border: 2px solid transparent;
-    width: 200px; 
+  border: 2px solid transparent;
+  width: 200px; 
 }
 
 input[type=radio]:checked + label img {
-    border-color: blue;
-    box-shadow: 0 0 10px rgba(0,0,255,0.5);
+  border-color: blue;
+  box-shadow: 0 0 10px rgba(0,0,255,0.5);
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
 }
 
 footer a {
-    color: black;
+  color: lightgray;
 }

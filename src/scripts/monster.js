@@ -78,7 +78,7 @@ export class Monster {
     directions.forEach((dir) => {
       var neighborX = playerPos.x + dir.x;
       var neighborY = playerPos.y + dir.y;
-      if (neighborX < 0 || neighborX >= window.GAMESTATE.cols || neighborY < 0 || neighborY >= window.GAMESTATE.rows) return;
+      if (neighborX < 0 || neighborX > window.GAMESTATE.cols || neighborY < 0 || neighborY > window.GAMESTATE.rows) return;
       var cell = window.GAMESTATE.indexToCell({x: neighborX, y: neighborY});
       if (cell && (cell.querySelector('.monster') || cell.classList.contains('wall'))) return;
       var g = window.GAMESTATE.chebyshevDistance(this.position, {x: neighborX, y: neighborY});
@@ -94,7 +94,9 @@ export class Monster {
 
   takeTurn() {
     this.makeMove();
-    this.makeAttack();
+    setTimeout(() => {
+      this.makeAttack();
+   }, 400);
   }
 
   //This is the pathfinding algorithm, credit to Logan for the name.
@@ -127,7 +129,7 @@ export class Monster {
       directions.forEach((dir)=> {
         var neighborX = currentPos.x + dir.x;
         var neighborY = currentPos.y + dir.y;
-        if (neighborX < 0 || neighborX >= window.GAMESTATE.cols || neighborY < 0 || neighborY >= window.GAMESTATE.rows) {
+        if (neighborX < 0 || neighborX > window.GAMESTATE.cols || neighborY < 0 || neighborY > window.GAMESTATE.rows) {
           visited.push({x : neighborX, y : neighborY, parent: currentPos});
           return;
         }
@@ -153,16 +155,19 @@ export class Monster {
 
   makeMove() {
     const playerPos = window.GAMESTATE.playerActor.position;
-    if (window.GAMESTATE.chebyshevDistance(playerPos, this.position) === 1) {
+    if (window.GAMESTATE.chebyshevDistance(playerPos, this.position) === this.attackRange) {
       return;
     }
     const startPos = this.position;
     const targetPos = this.getClosestPlayerTile(playerPos);
     const path = this.calebStar(startPos, targetPos);
     const finalPos = {x : path.at(-1).x, y : path.at(-1).y};
+    const startCell = window.GAMESTATE.indexToCell(startPos);
     const finalCell = window.GAMESTATE.indexToCell(finalPos);
-    // console.log(targetPos);
-    finalCell.appendChild(this.token);
+    if (finalCell === null) {
+      return;
+    }
+    window.GAMESTATE.animateTokenMove(this.token, startCell, finalCell);
     this.position = finalPos;
   }
 
@@ -170,6 +175,7 @@ export class Monster {
     const player = window.GAMESTATE.playerActor;
     var range = this.attackRange;
     if (window.GAMESTATE.chebyshevDistance(this.position, player.position) <= range) {
+      window.GAMESTATE.animateTokenAttack(this.token, this.position, player.position);
       var damage = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
       player.health -= damage;
       console.log(player.health);
