@@ -5,22 +5,44 @@ export class Player {
     this.position = position;
     this.token = this.createToken();
     this.movementRange = 4;
+    let portrait = document.getElementById('character-portrait');
+    let portraitLabel = document.getElementById('portrait-label');
+    let playerDamage = document.getElementById('player-damage');
+    let playerRange = document.getElementById('player-range');
     // make this a switch
     switch (this.type) {
       case 'ranger':
         this.attackRange = 6;
         this.health = 30;
-        this.attackDamage = [4, 5, 6, 7, 8, 9, 10, 11];
+        this.attackDamage = [5, 6, 7, 8, 9, 10, 11, 12];
+        window.PLAYERHEALTH.textContent = 30;
+        portrait.src = "../assets/characters/Ranger.png";
+        portrait.alt = "Ranger Protrait";
+        portraitLabel.textContent = "Class: Ranger";
+        playerDamage.textContent = "1d8+4";
+        playerRange.textContent = "30ft";
         break;
       case 'wizard':
         this.attackRange = 3;
         this.health = 30;
-        this.attackDamage = [7, 8, 9, 10, 11, 12, 13, 14];  
+        this.attackDamage = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+        window.PLAYERHEALTH.textContent = 30;
+        portrait.src = "../assets/characters/Wizard.png";
+        portrait.alt = "Wizard Protrait";
+        portraitLabel.textContent = "Class: Wizard";
+        playerDamage.textContent = "2d10";
+        playerRange.textContent = "15ft";
         break;
       case 'fighter':
         this.attackRange = 1;
         this.health = 50;
-        this.attackDamage = [10, 11, 12, 13, 14, 15, 16, 17];
+        this.attackDamage = [7,8,9,10,11,12,13,14,15,16,17];
+        window.PLAYERHEALTH.textContent = 50;
+        portrait.src = "../assets/characters/Fighter.png";
+        portrait.alt = "Fighter Protrait";
+        portraitLabel.textContent = "Class: Fighter";
+        playerDamage.textContent = "2d6+5";
+        playerRange.textContent = "5ft";
         break;
       default:
         console.error('Unknown player type:', this.type);

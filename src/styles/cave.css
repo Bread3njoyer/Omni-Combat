@@ -1,0 +1,52 @@
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(39, 40, 51); 
+}
+
+.game-container h1 {
+  margin: 10px;
+}
+
+.game-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-container {
+  /*This is the grid information*/
+  display: grid;
+  grid-template-columns: repeat(15,minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+
+  width: 100vmin;
+  aspect-ratio: 3/2;
+  /*This sets the background image directly in the cetner and tells the HTML not to repeat it (like the tiling)*/
+  background: url("../assets/maps/Cave_map.jpg") no-repeat center center;
+  background-size: 100% 100%;
+
+  /*This is just a border around the whole grid*/
+  border: 4px solid rgb(123, 123, 123);
+  border-radius: 5px
+}
+
+.info-container {
+  background-color: rgba(39, 40, 51);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+footer {
+  background-color: rgba(39, 40, 51); 
+  margin: 0;
+  padding: 0;
+}
+
+footer p {
+  margin: 10px;
+  color: lightgray;
+}
