@@ -1,4 +1,4 @@
-import { GameState } from './gridScripts.js';
+import { GameState } from './grid.js';
 
 
 export class Monster {
@@ -14,7 +14,7 @@ export class Monster {
       case 'forest':
         this.type = 'wolf';
         this.health = 15;
-        this.attackRange = 3;
+        this.attackRange = 1;
         this.attackDamage = [3,4,5,6,7,8];
         this.movementRange = 5;
         break;
@@ -22,20 +22,19 @@ export class Monster {
         this.type = 'goblin';
         this.health = 20;
         this.attackRange = 3;
-        this.attackDamage = [3,4,5,6,7,8];
         this.movementRange = 3;
         break;
       case 'coliseum':
         this.type = 'minotaur';
         this.health = 50;
         this.attackRange = 1;
-        this.attackDamage = [3,4,5,6,7,8];
+        this.attackDamage = [8,9,10,11,12,13,14,15];
         this.movementRange = 4;
         break;
       default:
         break;
     }
-    this.token = this.createToken(idNumber);
+    this.token = this.createToken();
   }
 
   createToken() {
@@ -65,7 +64,7 @@ export class Monster {
     monster.appendChild(monsterToken);
     return monster;
   }
-  
+
   getClosestPlayerTile(playerPos) {
     const directions = [
         {x: 0, y: -this.attackRange}, {x: 0, y: this.attackRange}, {x: -this.attackRange, y: 0}, {x: this.attackRange, y: 0},
@@ -79,9 +78,9 @@ export class Monster {
     directions.forEach((dir) => {
       var neighborX = playerPos.x + dir.x;
       var neighborY = playerPos.y + dir.y;
-      if (neighborX < 0 || neighborX >= window.GAMESTATE.cols || neighborY < 0 || neighborY >= window.GAMESTATE.rows) return;
+      if (neighborX < 0 || neighborX > window.GAMESTATE.cols || neighborY < 0 || neighborY > window.GAMESTATE.rows) return;
       var cell = window.GAMESTATE.indexToCell({x: neighborX, y: neighborY});
-      if (cell && (cell.querySelector('.monster') || cell.querySelector('.wall'))) return;
+      if (cell && (cell.querySelector('.monster') || cell.classList.contains('wall'))) return;
       var g = window.GAMESTATE.chebyshevDistance(this.position, {x: neighborX, y: neighborY});
       if (g < bestPos.g) {
         bestPos.x = neighborX;
@@ -94,11 +93,14 @@ export class Monster {
   }
 
   takeTurn() {
-    var playerPos = window.GAMESTATE.playerActor.position;
-    this.makeMove(playerPos);
+    this.makeMove();
+    setTimeout(() => {
+      this.makeAttack();
+   }, 400);
   }
 
   //This is the pathfinding algorithm, credit to Logan for the name.
+  // Closer to BFS than A* but I think it uses the idea of G from A*.
   calebStar(startPos, endPos) {
     var tempPos = startPos;
     tempPos.partent = null;
@@ -127,12 +129,12 @@ export class Monster {
       directions.forEach((dir)=> {
         var neighborX = currentPos.x + dir.x;
         var neighborY = currentPos.y + dir.y;
-        if (neighborX < 0 || neighborX >= window.GAMESTATE.cols || neighborY < 0 || neighborY >= window.GAMESTATE.rows) {
+        if (neighborX < 0 || neighborX > window.GAMESTATE.cols || neighborY < 0 || neighborY > window.GAMESTATE.rows) {
           visited.push({x : neighborX, y : neighborY, parent: currentPos});
           return;
         }
         var cell = window.GAMESTATE.indexToCell({x: neighborX, y: neighborY});
-        if (cell && (cell.querySelector('.monster') || cell.querySelector('.wall'))) {
+        if (cell && (cell.querySelector('.monster') || cell.classList.contains('wall'))) {
           visited.push({x : neighborX, y : neighborY, parent: currentPos});
           return;
         }
@@ -151,15 +153,40 @@ export class Monster {
   }
 
 
-  makeMove(playerPos) {
+  makeMove() {
+    const playerPos = window.GAMESTATE.playerActor.position;
+    if (window.GAMESTATE.chebyshevDistance(playerPos, this.position) === this.attackRange) {
+      return;
+    }
     const startPos = this.position;
     const targetPos = this.getClosestPlayerTile(playerPos);
     const path = this.calebStar(startPos, targetPos);
     const finalPos = {x : path.at(-1).x, y : path.at(-1).y};
+    const startCell = window.GAMESTATE.indexToCell(startPos);
     const finalCell = window.GAMESTATE.indexToCell(finalPos);
-    console.log(targetPos);
-    finalCell.appendChild(this.token);
+    if (finalCell === null) {
+      return;
+    }
+    window.GAMESTATE.animateTokenMove(this.token, startCell, finalCell);
     this.position = finalPos;
   }
 
+  makeAttack() {
+    const player = window.GAMESTATE.playerActor;
+    var range = this.attackRange;
+    if (window.GAMESTATE.chebyshevDistance(this.position, player.position) <= range) {
+      window.GAMESTATE.animateTokenAttack(this.token, this.position, player.position);
+      var damage = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
+      player.health -= damage;
+      console.log(player.health);
+      window.PLAYERHEALTH.textContent = player.health;
+      if (player.health <= 0) {
+        window.GAMESTATE.triggerLoss();
+      }
+      var attacker = `${this.type} ${this.idNumber}`;
+      window.GAMESTATE.generateCombatLogEntry(attacker, player.type, damage);
+    }
+  }
+
 }
+

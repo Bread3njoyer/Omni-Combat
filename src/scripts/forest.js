@@ -1,5 +1,5 @@
-import { Monster } from './monsterScripts.js'; 
-import { Player } from './playerScripts.js';
+import { Monster } from './monster.js'; 
+import { Player } from './player.js';
 
 export function createForestActors(character, difficulty) {
   var num_wolves = 0;
@@ -51,5 +51,5 @@ export function createForestActors(character, difficulty) {
     actors.push(monster);
   }
 
-  return actors;
+  return [actors, num_wolves];
 }
