@@ -51,7 +51,7 @@ footer p {
   color: lightgray;
 }
 
-.body p, h1, h4 {
+body p, h1, h4, .player-info p, label, .log, #info-text {
   color: black !important;
 }
 
@@ -60,5 +60,9 @@ footer p {
 }
 
 .log {
+  color: black !important;
+}
+
+#info-text {
   color: black !important;
 }

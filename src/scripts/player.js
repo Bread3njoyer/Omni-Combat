@@ -14,12 +14,12 @@ export class Player {
       case 'ranger':
         this.attackRange = 6;
         this.health = 30;
-        this.attackDamage = [4, 5, 6, 7, 8, 9, 10, 11];
+        this.attackDamage = [5, 6, 7, 8, 9, 10, 11, 12];
         window.PLAYERHEALTH.textContent = 30;
         portrait.src = "../assets/characters/Ranger.png";
         portrait.alt = "Ranger Protrait";
         portraitLabel.textContent = "Class: Ranger";
-        playerDamage.textContent = "1d8+3";
+        playerDamage.textContent = "1d8+4";
         playerRange.textContent = "30ft";
         break;
       case 'wizard':

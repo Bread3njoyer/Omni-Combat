@@ -1,6 +1,6 @@
-import {createForestActors} from './forestScripts.js';
-import {createCaveActors, createCaveWalls} from './caveScripts.js';
-import {createColiActors, createColiWalls} from './coliseumScripts.js';
+import {createForestActors} from './forest.js';
+import {createCaveActors, createCaveWalls} from './cave.js';
+import {createColiActors, createColiWalls} from './coliseum.js';
 
 export class GameState {
   constructor() {
@@ -79,6 +79,7 @@ export class GameState {
     entry.classList.add('active');
     entry.textContent = `${attacker} did ${damage} damage to ${attackie}`;
     COMBATLOG.appendChild(entry);
+    COMBATLOG.scrollTop = COMBATLOG.scrollHeight;
   }
 
   generateGrid(character, difficulty, map) {
@@ -87,36 +88,43 @@ export class GameState {
       console.error('Grid container not found!');
       return;
     }
-    for (let i = 0; i < this.rows * this.cols; i++) {
-      const cell = document.createElement('div');
-      cell.classList.add('grid-item');
-      cell.classList.add('no-action');
-      cell.id = `cell-${i}`; // Assigning an ID to each cell for easy reference.
-      cell.addEventListener('click', () => {
-        if (cell.classList.contains("available-move")) {
-          this.takeAction('move', cell);
-        } else if (cell.classList.contains("available-attack")) {
-          this.takeAction('attack', cell);
-        }
-      });
-      this.gridContainer.appendChild(cell);
-    }
-
+    var walls = [];
     switch (map) {
       case 'forest':
         var [actors, numMonsters] = createForestActors(character, difficulty);
         break;
       case 'cave':
         var [actors, numMonsters] = createCaveActors(character, difficulty);
-        var wallLocations = createCaveWalls();
+        walls = createCaveWalls();
         break;
       case 'coliseum':
         var [actors, numMonsters] = createColiActors(character, difficulty);
-        var wallLocations = createColiWalls();
+        walls = createColiWalls();
         break;
       default:
         var [actors, numMonsters] = [[], 0];
+        walls = [];
         break;
+    }
+    for (let i = 0; i < this.rows * this.cols; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('grid-item');
+      cell.classList.add('no-action');
+      cell.id = `cell-${i}`; // Assigning an ID to each cell for easy reference.
+      cell.addEventListener('click', () => { 
+        if (cell.classList.contains("available-move")) {
+          this.takeAction('move', cell);
+        } else if (cell.classList.contains("available-attack")) {
+          this.takeAction('attack', cell);
+        }
+      });
+      if (walls.length !== 0) {
+        var cellPos = this.cellToIndex(cell);
+        if (walls[cellPos.y][cellPos.x] === 'w') {
+          cell.classList.add('wall');
+        }
+      }
+      this.gridContainer.appendChild(cell);
     }
     this.monsterCount = numMonsters;
     this.playerActor = actors[0];
@@ -165,7 +173,7 @@ export class GameState {
         };
         if (this.chebyshevDistance(actor.position, location) <= range) {
           const cell = this.indexToCell(location);
-          if (!cell.querySelector('.monster') && !cell.querySelector('.player')) {
+          if (!cell.querySelector('.monster') && !cell.classList.contains('wall')) {
             moves.push(location);
           }
         }
@@ -233,18 +241,15 @@ export class GameState {
   }
 
   triggerLoss() {
-    togglePopup(document.getElementById('popup-modal-loss'));
+    document.getElementById('popup-modal-loss').style.display = "block";
   }
 
   triggerWin() {
-    togglePopup(document.getElementById('popup-modal-win'));
+    document.getElementById('popup-modal-win').style.display = "block";
   }
   
 }
 
-function togglePopup(modal) {
-  modal.style.display = (modal.style.display === "block") ? "none" : "block";
-}
 
 function toggleUI() {
   document.getElementById('moveBtn').classList.toggle('hidden');

@@ -1,5 +1,5 @@
-import { Monster } from './monsterScripts.js'; 
-import { Player } from './playerScripts.js';
+import { Monster } from './monster.js'; 
+import { Player } from './player.js';
 
 export function createColiActors(character, difficulty) {
   var actors = [];
@@ -38,9 +38,17 @@ export function createColiActors(character, difficulty) {
 }
 
 export function createColiWalls() {
-  var walls = [];
-  var rows = 10, cols = 10;
-  for (let i = 0; i < rows; i++) {
-
-  }
+  var walls = [
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'n', 'n', 'n', 'n', 'w', 'w', 'w'],
+    ['w', 'w', 'n', 'n', 'n', 'n', 'n', 'n', 'w', 'w'],
+    ['w', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'w'],
+    ['w', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'w'],
+    ['w', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'w'],
+    ['w', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'n', 'w'],
+    ['w', 'w', 'n', 'n', 'n', 'n', 'n', 'n', 'w', 'w'],
+    ['w', 'w', 'w', 'n', 'n', 'n', 'n', 'w', 'w', 'w'],
+    ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w']
+  ];
+  return walls;
 }

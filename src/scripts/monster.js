@@ -1,4 +1,4 @@
-import { GameState } from './gridScripts.js';
+import { GameState } from './grid.js';
 
 
 export class Monster {
@@ -28,7 +28,7 @@ export class Monster {
         this.type = 'minotaur';
         this.health = 50;
         this.attackRange = 1;
-        this.attackDamage = [3,4,5,6,7,8];
+        this.attackDamage = [8,9,10,11,12,13,14,15];
         this.movementRange = 4;
         break;
       default:
@@ -80,7 +80,7 @@ export class Monster {
       var neighborY = playerPos.y + dir.y;
       if (neighborX < 0 || neighborX >= window.GAMESTATE.cols || neighborY < 0 || neighborY >= window.GAMESTATE.rows) return;
       var cell = window.GAMESTATE.indexToCell({x: neighborX, y: neighborY});
-      if (cell && (cell.querySelector('.monster') || cell.querySelector('.wall'))) return;
+      if (cell && (cell.querySelector('.monster') || cell.classList.contains('wall'))) return;
       var g = window.GAMESTATE.chebyshevDistance(this.position, {x: neighborX, y: neighborY});
       if (g < bestPos.g) {
         bestPos.x = neighborX;
@@ -132,7 +132,7 @@ export class Monster {
           return;
         }
         var cell = window.GAMESTATE.indexToCell({x: neighborX, y: neighborY});
-        if (cell && (cell.querySelector('.monster') || cell.querySelector('.wall'))) {
+        if (cell && (cell.querySelector('.monster') || cell.classList.contains('wall'))) {
           visited.push({x : neighborX, y : neighborY, parent: currentPos});
           return;
         }
@@ -153,6 +153,9 @@ export class Monster {
 
   makeMove() {
     const playerPos = window.GAMESTATE.playerActor.position;
+    if (window.GAMESTATE.chebyshevDistance(playerPos, this.position) === 1) {
+      return;
+    }
     const startPos = this.position;
     const targetPos = this.getClosestPlayerTile(playerPos);
     const path = this.calebStar(startPos, targetPos);
