@@ -12,7 +12,7 @@ export class Player {
     // make this a switch
     switch (this.type) {
       case 'ranger':
-        this.attackRange = 6;
+        this.attackRange = 9;
         this.health = 30;
         this.attackDamage = [5, 6, 7, 8, 9, 10, 11, 12];
         window.PLAYERHEALTH.textContent = 30;
@@ -20,10 +20,10 @@ export class Player {
         portrait.alt = "Ranger Protrait";
         portraitLabel.textContent = "Class: Ranger";
         playerDamage.textContent = "1d8+4";
-        playerRange.textContent = "30ft";
+        playerRange.textContent = "45ft";
         break;
       case 'wizard':
-        this.attackRange = 3;
+        this.attackRange = 6;
         this.health = 30;
         this.attackDamage = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
         window.PLAYERHEALTH.textContent = 30;
@@ -31,7 +31,7 @@ export class Player {
         portrait.alt = "Wizard Protrait";
         portraitLabel.textContent = "Class: Wizard";
         playerDamage.textContent = "2d10";
-        playerRange.textContent = "15ft";
+        playerRange.textContent = "30ft";
         break;
       case 'fighter':
         this.attackRange = 1;

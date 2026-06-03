@@ -16,6 +16,25 @@ export class GameState {
     this.attackUsed = false;
   }
 
+  animateTokenAttack(token, startPos, targetPos) {
+    const bumpX = Math.sign(startPos.x - targetPos.x) * 15; // should be 15 px bump
+    const bumpY = Math.sign(startPos.y - targetPos.y) * 15;
+    token.style.zIndex = '100';
+
+    const animation = token.animate([
+      { transform: 'translate(0px, 0px)'},
+      { transform: `translate(${bumpX}px, ${bumpY}px)`, offset: 0.3},
+      { transform: 'translate(0px, 0px)'}
+    ], {
+      duration: 300,
+      easing: 'ease-in-out'
+    });
+
+    animation.onfinish = () => {
+      token.style.zIndex = 'auto';
+    };
+  }
+
   animateTokenMove(token, startCell, endCell) {
     const startRect = token.getBoundingClientRect();
     endCell.appendChild(token);
@@ -46,6 +65,7 @@ export class GameState {
     var targetId = targetCell.querySelector('.monster').id;
     var targetIdNum = parseInt(targetId.substring(targetId.indexOf('-') + 1), 10);
     var target = this.monsters[targetIdNum-1];
+    this.animateTokenAttack(actor.token, actor.position, target.position);
     var damage = actor.attackDamage[Math.floor(Math.random() * actor.attackDamage.length)];
     target.health -= damage;
     this.generateCombatLogEntry(actor.type, `${target.type} ${target.idNumber}`, damage);
@@ -93,7 +113,10 @@ export class GameState {
     var actor = this.currentActor;
     PLAYERMOVEMENT.textContent = 4;
     actor.movementRange = 4;
-    this.attackUsed = false;
+    if (this.attackUsed === true) {
+      document.getElementById('attackBtn').classList.toggle('hidden');
+      this.attackUsed = false;
+    }
   }
 
   generateCombatLogEntry(attacker, attackie, damage) {
@@ -240,8 +263,8 @@ export class GameState {
       this.toggleActions(action);
       CONTROLWINDOW.classList.toggle('info');
       INFOTEXT.textContent = ``;
-      toggleUI();
       this.attack(targetCell);
+      toggleUI();
     }
   }
 
@@ -278,7 +301,9 @@ export class GameState {
 
 function toggleUI() {
   document.getElementById('moveBtn').classList.toggle('hidden');
-  document.getElementById('attackBtn').classList.toggle('hidden');
+  if (GAMESTATE.attackUsed === false) {
+    document.getElementById('attackBtn').classList.toggle('hidden');
+  }
   document.getElementById('endTurnBtn').classList.toggle('hidden');
 
   document.getElementById('info-text').classList.toggle('hidden');
@@ -349,15 +374,18 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   endTurnBtn.addEventListener('click', () => {
     GAMESTATE.endTurn();
-    GAMESTATE.monsters.forEach((monster) => {
+    GAMESTATE.monsters.forEach((monster, index) => {
       GAMESTATE.currentAction = null;
       if (monster !== 'dead') {
-        GAMESTATE.currentActor = monster;
-        setTimeout(monster.takeTurn(), 500);
+        setTimeout(() => {
+          GAMESTATE.currentActor = monster;
+          monster.takeTurn();
+        }, 500 + (index * 800));
       }
     });
-    GAMESTATE.currentActor = GAMESTATE.playerActor;
-
+    setTimeout(() => {
+      GAMESTATE.currentActor = GAMESTATE.playerActor;
+    }, 500 + (GAMESTATE.monsters.length * 800));
   });
   backBtn.addEventListener('click', () => {
     if (GAMESTATE.attackUsed != true) {
