@@ -153,16 +153,16 @@ export class Monster {
 
   makeMove() {
     const playerPos = window.GAMESTATE.playerActor.position;
-    if (window.GAMESTATE.chebyshevDistance(playerPos, this.position) === 1) {
+    if (window.GAMESTATE.chebyshevDistance(playerPos, this.position) === this.attackRange) {
       return;
     }
     const startPos = this.position;
     const targetPos = this.getClosestPlayerTile(playerPos);
     const path = this.calebStar(startPos, targetPos);
     const finalPos = {x : path.at(-1).x, y : path.at(-1).y};
+    const startCell = window.GAMESTATE.indexToCell(startPos);
     const finalCell = window.GAMESTATE.indexToCell(finalPos);
-    // console.log(targetPos);
-    finalCell.appendChild(this.token);
+    window.GAMESTATE.animateTokenMove(this.token, startCell, finalCell);
     this.position = finalPos;
   }
 

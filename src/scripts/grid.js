@@ -16,6 +16,30 @@ export class GameState {
     this.attackUsed = false;
   }
 
+  animateTokenMove(token, startCell, endCell) {
+    const startRect = token.getBoundingClientRect();
+    endCell.appendChild(token);
+    const endRect = token.getBoundingClientRect();
+    const deltaX = startRect.left - endRect.left;
+    const deltaY = startRect.top - endRect.top;
+
+    token.style.transition = 'none';
+    token.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    token.style.zIndex = '100';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        token.style.transition = 'transform 0.4s ease-in-out';
+        token.style.transform = `translate(0, 0)`;
+        setTimeout(() => {
+          token.style.transition = 'none';
+          token.style.transform = 'none';
+          token.style.zIndex = 'auto';
+        }, 400);
+      });
+    });
+  }
+
   attack(targetCell) {
     this.attackUsed = true;
     var actor = this.currentActor;
@@ -189,7 +213,8 @@ export class GameState {
 
   move(targetCell) {
     var actor = this.currentActor;
-    targetCell.appendChild(actor.token);
+    var startCell = this.indexToCell(actor.position);
+    this.animateTokenMove(actor.token, startCell, targetCell);
     var targetPos = this.cellToIndex(targetCell);
     var distanceTraveled = Math.floor(this.chebyshevDistance(actor.position, targetPos));
     actor.position = targetPos;
