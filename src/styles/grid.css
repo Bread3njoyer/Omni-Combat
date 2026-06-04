@@ -31,31 +31,86 @@
 }
 
 .combat-log {
-  color: lightgray;
-  font-family: "Papyrus";
-  text-align: left;
-  font-size: 1vw;
-  align-self: center;
-}
-
-.player-info {
-  color: lightgray;
+  color: var(--text-primary);
   font-family: "Papyrus";
   text-align: center;
   font-size: 1vw;
+  width: 20%;
+  align-self: center;
+  background-color: var(--background-color);
+}
+
+.combat-log h1 {
+  color: var(--text-primary);
+}
+
+.player-info {
+  color: var(--text-primary);
+  font-family: "Papyrus";
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  width: 20%;
+  background-color: var(--background-color);
+}
+
+#player-health {
+  font-size: x-large;
+  margin: 0;
+}
+
+.player-info h1 {
+  color: var(--text-primary);
+  margin-bottom: 0px;
+}
+
+.player-info h1,
+.player-info #character-portrait,
+.player-info #portrait-label {
+  flex: 0 0 100%;
+  text-align: center;
+}
+
+.player-info #character-portrait {
+  max-width: 120px;
+  height: auto;
+  margin: 10px auto;
+  display: block;
+}
+
+.player-info .health,
+.player-info .armor,
+.player-info .movement {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin: 0px;
 }
 
-.player-info img {
-  margin-top: -50px;
-  margin-bottom: 5px;
+.player-info h4, p, span {
+  margin: 4px 0;
 }
 
-.player-info h4, p {
-  margin: 5px;
+.player-info .attack {
+  flex: 0 0 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 15px;
 }
 
+.attack .attack-name,
+.attack .attack-damage,
+.attack .attack-range {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
 
 .modal {
   display: none;
@@ -110,11 +165,6 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  color: lightgray;
-  font-family: "Papyrus";
-}
-
 .available-move {
   background-color: rgba(0, 255, 0, .5);
   cursor: pointer;
@@ -146,7 +196,7 @@ h1 {
 }
 
 #info-text {
-  color: lightgray;
+  color: var(--text-primary);
   text-align: center;
   white-space: pre-line;
   font-size: x-large;

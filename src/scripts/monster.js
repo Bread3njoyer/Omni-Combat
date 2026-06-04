@@ -1,5 +1,4 @@
-import { GameState } from './grid.js';
-
+import {generateAttack} from './grid.js';
 
 export class Monster {
   constructor(map, position, idNumber) {
@@ -17,12 +16,15 @@ export class Monster {
         this.attackRange = 1;
         this.attackDamage = [3,4,5,6,7,8];
         this.movementRange = 5;
+        this.toHit = 4;
+        this.armor = 12;
         break;
       case 'cave':
         this.type = 'goblin';
         this.health = 20;
         this.attackRange = 3;
         this.movementRange = 3;
+        this.armor = 14;
         break;
       case 'coliseum':
         this.type = 'minotaur';
@@ -30,6 +32,8 @@ export class Monster {
         this.attackRange = 1;
         this.attackDamage = [8,9,10,11,12,13,14,15];
         this.movementRange = 4;
+        this.toHit = 6;
+        this.armor = 17;
         break;
       default:
         break;
@@ -176,15 +180,26 @@ export class Monster {
     var range = this.attackRange;
     if (window.GAMESTATE.chebyshevDistance(this.position, player.position) <= range) {
       window.GAMESTATE.animateTokenAttack(this.token, this.position, player.position);
-      var damage = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
+      var attackRoll = generateAttack();
+      console.log(attackRoll, this.toHit, player.armor);
+      var damage = 0;
+      var hit = false;
+      if (attackRoll === 20) {
+        var damage1 = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
+        var damage2 = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
+        hit = 'crit';
+        damage = damage1 + damage2;
+      } else if ((attackRoll + this.toHit) >= player.armor) {
+        damage = this.attackDamage[Math.floor(Math.random() * this.attackDamage.length)];
+        hit = true;
+      }
       player.health -= damage;
-      console.log(player.health);
       window.PLAYERHEALTH.textContent = player.health;
       if (player.health <= 0) {
         window.GAMESTATE.triggerLoss();
       }
       var attacker = `${this.type} ${this.idNumber}`;
-      window.GAMESTATE.generateCombatLogEntry(attacker, player.type, damage);
+      window.GAMESTATE.generateCombatLogEntry(attacker, player.type, damage, hit);
     }
   }
 

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: rgba(198, 181, 165); 
+  background-color: var(--coliseum-background); 
 }
 
 .game-container h1 {
@@ -34,35 +34,23 @@
 }
 
 .info-container {
-  background-color: rgba(198, 181, 165);
+  background-color: var(--coliseum-background);
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
+#info-text {
+  color: var(--text-secondary) !important;
+}
+
 footer {
-  background-color: rgba(198, 181, 165); 
+  background-color: var(--coliseum-background); 
   margin: 0;
   padding: 0;
 }
 
-footer p {
-  margin: 10px;
-  color: lightgray;
-}
-
-body p, h1, h4, .player-info p, label, .log, #info-text {
-  color: black !important;
-}
-
-.player-info p, label {
-  color: black !important;
-}
-
-.log {
-  color: black !important;
-}
-
-#info-text {
-  color: black !important;
+h1, footer p {
+  color: var(--text-secondary);
+  font-family: "Papyrus";
 }

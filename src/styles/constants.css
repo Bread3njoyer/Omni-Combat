@@ -1,0 +1,8 @@
+:root {
+  --background-color: rgb(60, 60, 60);
+  --forest-background: rgb(0, 75, 0);
+  --cave-background: rgb(39, 40, 51);
+  --coliseum-background: rgb(198, 181, 165);
+  --text-primary: whitesmoke;
+  --text-secondary: rgb(67,67,67);
+}

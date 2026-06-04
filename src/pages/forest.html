@@ -1,68 +1,92 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <!-- Most of this was pulled from the "html-5 boilerplate" extension -->
-    <meta charset="utf-8">
-    <link rel="icon" href="../Omnitech_favicon.ico" />
-    <title>Tokens & Tarrasques - Forest</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../styles/forest.css">
-    <link rel="stylesheet" href="../styles/grid.css">
-  </head>
-  <body>
-    <div class="info-container">
-      <div class="player-info">
-          <h1>Player Info</h1>
-          <img id="character-portrait" src="" alt="">
-          <label for="character-portrait" id="portrait-label" ></label>
-          <h4>Health: </h4> <p id="player-health"></p>
-          <h4>Damage: </h4><p id="player-damage"></p>
-          <h4>Movement: </h4><p id="player-movement">4</p>
-          <h4>Range: </h4><p id="player-range"></p>
-      </div> 
-      <div class="game-container">
-        <h1>Tokens & Tarrasques - Forest</h1>
-        <div class="game-window">
-          <div class="grid-container"> 
-            <!-- This is where the grid will be generated -->
-          </div>
-          
-          <div class="controls">
-            <button id="moveBtn">Move</button>
-            <button id="attackBtn">Attack</button>
-            <button id="endTurnBtn">End Turn</button>
-            <p id="info-text" class="hidden"></p>
-            <button id="backBtn" class ="hidden">Back</button>
-          </div>
-        </div>
-      </div>
-      <div class="combat-log">
-        <h1>Combat Log</h1>
-        <div class="log">
-          <p class="active"></p>
-        </div>
-      </div> 
-    </div>
 
-    <div id="popup-modal-win" class="modal">
-      <div class="modal-content">
-        <h1 id="win-text">You won!</h1>
-        <button class="restartBtn">Restart</button>
-        <button class="returnBtn">Return Home</button>
+<head>
+  <!-- Most of this was pulled from the "html-5 boilerplate" extension -->
+  <meta charset="utf-8">
+  <link rel="icon" href="../Omnitech_favicon.ico" />
+  <title>Tokens & Tarrasques - Forest</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../styles/forest.css">
+  <link rel="stylesheet" href="../styles/grid.css">
+  <link rel="stylesheet" href="../styles/constants.css">
+</head>
+
+<body>
+  <div class="info-container">
+    <div class="player-info">
+      <h1>Player Info</h1>
+      <img id="character-portrait" src="" alt="">
+      <label for="character-portrait" id="portrait-label"></label>
+      <div class='armor'>
+        <h4>Armor:</h4>
+        <p id="player-armor">13</p>
+      </div>
+      <div class='health'>
+        <h4>Health:</h4>
+        <p id="player-health"></p>
+      </div>
+      <div class='movement'>
+        </p>
+        <h4>Movement:</h4>
+        <p id="player-movement">4</p>
+      </div>
+      <div class='attack'>
+        <div class='attack-name'>
+          <h4>Attack:</h4><span id="player-attack">firebolt</span>
+        </div>
+        <div class='attack-damage'></span>
+          <h4>Damage:</h4><span id="player-damage"></span>
+        </div>
+        <div class='attack-range'>
+          <h4>Range:</h4><span id="player-range"></span>
+        </div>
       </div>
     </div>
-    <div id="popup-modal-loss" class="modal">
-      <div class="modal-content">
-        <h1 id="loss-text">You lose :(</h1>
-        <button class="restartBtn">Restart</button>
-        <button class="returnBtn">Return Home</button>
+    <div class="game-container">
+      <h1>Tokens & Tarrasques - Forest</h1>
+      <div class="game-window">
+        <div class="grid-container">
+          <!-- This is where the grid will be generated -->
+        </div>
+
+        <div class="controls">
+          <button id="moveBtn">Move</button>
+          <button id="attackBtn">Attack</button>
+          <button id="endTurnBtn">End Turn</button>
+          <p id="info-text" class="hidden"></p>
+          <button id="backBtn" class="hidden">Back</button>
+        </div>
       </div>
     </div>
-    <footer>
-      <p>Map by 2-Minute Tabletop </p>
-    </footer>
-    <script type="module" src="../scripts/grid.js" defer></script>
-  </body>
+    <div class="combat-log">
+      <h1>Combat Log</h1>
+      <div class="log">
+        <p class="active"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="popup-modal-win" class="modal">
+    <div class="modal-content">
+      <h1 id="win-text">You won!</h1>
+      <button class="restartBtn">Restart</button>
+      <button class="returnBtn">Return Home</button>
+    </div>
+  </div>
+  <div id="popup-modal-loss" class="modal">
+    <div class="modal-content">
+      <h1 id="loss-text">You lose :(</h1>
+      <button class="restartBtn">Restart</button>
+      <button class="returnBtn">Return Home</button>
+    </div>
+  </div>
+  <footer>
+    <p>Map by 2-Minute Tabletop </p>
+  </footer>
+  <script type="module" src="../scripts/grid.js" defer></script>
+</body>
+
 </html>

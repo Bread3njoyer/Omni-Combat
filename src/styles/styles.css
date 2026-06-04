@@ -1,13 +1,9 @@
 body {
   font-family: "papyrus";
-  background-color: rgb(60, 60, 60);
+  background-color: var(--background-color);
   margin: 0;  
   padding: 20px;
-  color: whitesmoke;
-}
-
-h1 {
-  font-size: xx-large;
+  color: var(--text-primary);
 }
 
 p {
@@ -72,8 +68,8 @@ input[type=radio] + label img {
 }
 
 input[type=radio]:checked + label img {
-  border-color: blue;
-  box-shadow: 0 0 10px rgba(0,0,255,0.5);
+  border-color: whitesmoke;
+  box-shadow: 0 0 10px rgba(220,220,220,0.5);
 }
 
 footer {

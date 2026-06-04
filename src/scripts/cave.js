@@ -4,6 +4,7 @@ import { Player } from './player.js';
 export function createCaveActors(character, difficulty) {
   var num_goblins = 4;
   var monsterDamage = []
+  var toHit = 0;
   var selectedCols = 8;
   var selectedRows = 6;
   var actors = [];
@@ -19,12 +20,15 @@ export function createCaveActors(character, difficulty) {
   switch (difficulty) {
     case "loot_farm":
       monsterDamage = [1,2,3,4,5,6];
+      toHit = 4;
       break;
     case "dungeon":
       monsterDamage = [3,4,5,6,7,8];
+      toHit = 5;
       break;
     case "tpk":
       monsterDamage = [6,7,8,9,10,11];
+      toHit = 6;
       break;
     default:
       monsterDamage = [3,4,5,6,7,8];
@@ -49,6 +53,7 @@ export function createCaveActors(character, difficulty) {
     };
     var monster = new Monster('cave', monsterPosition, i+1);
     monster.attackDamage = monsterDamage;
+    monster.toHit = toHit;
     actors.push(monster);
   }
 

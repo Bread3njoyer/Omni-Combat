@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: rgba(39, 40, 51); 
+  background-color: var(--cave-background); 
 }
 
 .game-container h1 {
@@ -34,19 +34,24 @@
 }
 
 .info-container {
-  background-color: rgba(39, 40, 51);
+  background-color: var(--cave-background);
   display: flex;
   align-items: center;
   justify-content: space-around;
 }
 
 footer {
-  background-color: rgba(39, 40, 51); 
+  background-color: var(--cave-background); 
   margin: 0;
   padding: 0;
 }
 
 footer p {
   margin: 10px;
-  color: lightgray;
+  color: var(--text-primary);
+}
+
+h1 {
+  color: var(--text-primary);
+  font-family: "Papyrus";
 }
