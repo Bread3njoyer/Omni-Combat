@@ -1,3 +1,7 @@
+body {
+  background-color: var(--coliseum-background); 
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
@@ -34,7 +38,7 @@
 }
 
 .info-container {
-  background-color: var(--coliseum-background);
+
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -45,12 +49,18 @@
 }
 
 footer {
-  background-color: var(--coliseum-background); 
   margin: 0;
   padding: 0;
 }
 
-h1, footer p {
+h1 {
   color: var(--text-secondary);
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: bold;
+}
+
+footer p {
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-weight: normal;
 }

@@ -73,7 +73,7 @@ export class GameState {
     var target = this.monsters[targetIdNum - 1];
     this.animateTokenAttack(actor.token, actor.position, target.position);
     var attackRoll = generateAttack();
-    console.log(attackRoll, actor.toHit, target.armor);
+    // console.log(attackRoll, actor.toHit, target.armor);
     var damage = 0;
     var hit = false;
     if (attackRoll === 20) {
@@ -143,19 +143,16 @@ export class GameState {
   endTurn() {
     var actor = this.currentActor;
     PLAYERMOVEMENT.textContent = 4;
+    this.attackUsed = false;
     actor.movementRange = 4;
-    if (this.attackUsed === true) {
-      document.getElementById("attackBtn").classList.toggle("hidden");
-      this.attackUsed = false;
-    }
+    document.getElementById("moveBtn").classList.remove("hidden");
+    document.getElementById("attackBtn").classList.remove("hidden");
+    document.getElementById("endTurnBtn").classList.remove('hidden');
   }
 
   generateCombatLogEntry(attacker, attackie, damage, hit) {
-    const oldEntry = COMBATLOG.querySelector(".active");
-    oldEntry.classList.remove("active");
     const entry = document.createElement("p");
-    entry.classList.add("active");
-    if (hit) {
+    if (hit === true) {
       entry.textContent = `${attacker} did ${damage} damage to ${attackie}`;
     } else if (!hit) {
       entry.textContent = `${attacker} missed ${attackie} with their attack`;
@@ -233,6 +230,7 @@ export class GameState {
         if (this.chebyshevDistance(actor.position, location) <= range) {
           const cell = this.indexToCell(location);
           if (actor.type != "monster" && cell.querySelector(".monster")) {
+            console.log(location);
             attacks.push(location);
           } else if (cell.querySelector("player")) {
             attacks.push(location);
@@ -283,9 +281,20 @@ export class GameState {
       this.chebyshevDistance(actor.position, targetPos),
     );
     actor.position = targetPos;
+    console.log(actor.position);
     actor.movementRange -= distanceTraveled;
     PLAYERMOVEMENT.textContent = actor.movementRange;
-    this.toggleActions("move");
+    // this.toggleActions("move");
+  }
+
+  removeActions(action) {
+    for (let i = 0; i < this.cols; i++) {
+      for (let j = 0; j < this.rows; j++) {
+        const cell = this.indexToCell({x : i, y : j});
+        cell.classList.remove(`available-${action}`);
+        cell.classList.add('no-action');
+      }
+    }
   }
 
   removeToken(actor) {
@@ -298,9 +307,12 @@ export class GameState {
   }
 
   takeAction(action, targetCell) {
-    this.toggleActions(action);
+    this.removeActions(action);
     if (action === "move") {
       this.move(targetCell);
+      CONTROLWINDOW.classList.toggle("info");
+      INFOTEXT.textContent = ``;
+      toggleUI();
     } else if (action === "attack") {
       this.toggleActions(action);
       CONTROLWINDOW.classList.toggle("info");
@@ -340,7 +352,9 @@ export class GameState {
 }
 
 function toggleUI() {
-  document.getElementById("moveBtn").classList.toggle("hidden");
+  if (GAMESTATE.playerActor.movementRange > 0) {
+    document.getElementById("moveBtn").classList.toggle("hidden");
+  }
   if (GAMESTATE.attackUsed === false) {
     document.getElementById("attackBtn").classList.toggle("hidden");
   }
@@ -352,7 +366,7 @@ function toggleUI() {
 
 export function generateAttack() {
   var rolls = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
   ];
   return rolls[Math.floor(Math.random() * 20)];
 }
@@ -419,10 +433,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   endTurnBtn.addEventListener("click", () => {
-    GAMESTATE.endTurn();
-    var aliveMonsters = GAMESTATE.monsters.filter((mon) => mon !== "dead");
+    moveBtn.classList.add('hidden');
+    attackBtn.classList.add('hidden');
+    endTurnBtn.classList.add('hidden');
+    var aliveMonsters = GAMESTATE.monsters.filter((mon) => mon !== 'dead');
     aliveMonsters.forEach((monster, index) => {
-      GAMESTATE.currentAction = null;S
+      GAMESTATE.currentAction = null;
       setTimeout(
         () => {
           GAMESTATE.currentActor = monster;
@@ -434,8 +450,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(
       () => {
         GAMESTATE.currentActor = GAMESTATE.playerActor;
+        GAMESTATE.endTurn();
       },
-      500 + GAMESTATE.monsters.length * 800,
+      500 + aliveMonsters.length * 800,
     );
   });
   backBtn.addEventListener("click", () => {

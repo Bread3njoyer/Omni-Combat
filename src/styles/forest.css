@@ -1,9 +1,12 @@
+body {
+  background-color: var(--forest-background);
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: var(--forest-background); 
 }
 
 .game-container h1 {
@@ -34,14 +37,13 @@
 }
 
 .info-container {
-  background-color: var(--forest-background);
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: space-around;
+  height: 60rem;
 }
 
 footer {
-  background-color: var(--forest-background); 
   margin: 0;
   padding: 0;
 }
@@ -53,5 +55,6 @@ footer p {
 
 h1 {
   color: var(--text-primary);
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: bold;
 }

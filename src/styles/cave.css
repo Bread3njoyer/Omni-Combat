@@ -1,9 +1,12 @@
+body {
+  background-color: var(--cave-background); 
+}
+
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background-color: var(--cave-background); 
 }
 
 .game-container h1 {
@@ -53,5 +56,6 @@ footer p {
 
 h1 {
   color: var(--text-primary);
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: bold;
 }

@@ -1,8 +1,30 @@
+@font-face {
+    font-family: 'Mordred';
+    src: url('../assets/fonts/Mordred.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Mordred';
+    src: url('../assets/fonts/Mordred-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
   --background-color: rgb(60, 60, 60);
+  --parchment-color: rgb(217 196 134);
   --forest-background: rgb(0, 75, 0);
   --cave-background: rgb(39, 40, 51);
   --coliseum-background: rgb(198, 181, 165);
+  --attack: rgb(190, 20, 20);
+  --move: rgb(30,180,30);
+  /* --end: rgb(255, 219, 88); */
+  --end: rgb(	255, 172, 28);
   --text-primary: whitesmoke;
   --text-secondary: rgb(67,67,67);
+  --font-primary: 'Mordred', sans-serif;
 }

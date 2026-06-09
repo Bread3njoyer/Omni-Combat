@@ -32,7 +32,8 @@
 
 .combat-log {
   color: var(--text-primary);
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: normal;
   text-align: center;
   font-size: 1vw;
   width: 20%;
@@ -46,7 +47,8 @@
 
 .player-info {
   color: var(--text-primary);
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: normal;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -54,12 +56,32 @@
   align-items: center;
   box-sizing: border-box;
   width: 20%;
+  aspect-ratio: 2/3;
   background-color: var(--background-color);
+  padding: 20px;
+  margin-top: 3.5rem;
+  margin-bottom: 12rem;
+}
+
+.player-info, .combat-log {
+  border: 4px solid rgb(123, 123, 123);
+  border-radius: 5px
 }
 
 #player-health {
-  font-size: x-large;
-  margin: 0;
+  font-size: xx-large;
+  padding-right: 25px;
+  padding-bottom: 25px;
+  padding-left: 25px;
+  padding-top: 10px;
+  margin-top: -5px;
+  background-image: url("../assets/Health_icon.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: var(--text-primary);
+  text-shadow: 3px 3px black;
+  font-weight: bold;
 }
 
 .player-info h1 {
@@ -67,28 +89,50 @@
   margin-bottom: 0px;
 }
 
-.player-info h1,
-.player-info #character-portrait,
-.player-info #portrait-label {
+.player-info h1 {
   flex: 0 0 100%;
   text-align: center;
 }
 
-.player-info #character-portrait {
-  max-width: 120px;
+.player-info .portrait {
+  max-width: fit-content;
   height: auto;
-  margin: 10px auto;
-  display: block;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 100%;
+  width: 100%;
 }
 
-.player-info .health,
+#portrait-label {
+  font-size: clamp(.5rem, 2cqi, 1.25rem);
+}
+
+.player-info .health {
+  font-size: clamp(1.5rem, 6cqi, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.player-info .secondary-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-basis: 100%;
+  width: 100%;
+}
+
 .player-info .armor,
 .player-info .movement {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0px;
+  font-size: clamp(1.25rem, 5cqi, 1.75rem);
 }
 
 .player-info h4, p, span {
@@ -110,6 +154,7 @@
   flex-direction: column;
   align-items: center;
   flex: 1;
+  font-size: clamp(1rem, 4cqi, 1.5rem);
 }
 
 .modal {
@@ -140,7 +185,8 @@
   padding: 5px;
   font-size: 1rem;
   cursor: pointer;
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: normal;
 }
 
 .grid-item {
@@ -183,7 +229,8 @@ body {
   /* margin-left: 10px; */
   border: 2px solid rgb(123, 123, 123);
   border-radius: 5px;
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: normal;
 }
 
 .info {
@@ -205,10 +252,26 @@ body {
 
 .controls button {
   flex: 1;
+  height: 3rem;
   padding: 5px;
-  font-size: 1rem;
+  font-size: 2rem;
   cursor: pointer;
-  font-family: "Papyrus";
+  font-family: var(--font-primary);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 3px 3px black;
+}
+
+#endTurnBtn {
+  background-color: var(--end);
+}
+
+#moveBtn {
+  background-color: var(--move);
+}
+
+#attackBtn {
+  background-color: var(--attack);
 }
 
 .hidden {
@@ -217,14 +280,16 @@ body {
 
 .log {
   height: 200px;
-  width: 250px;
+  width: 100%;
   overflow: auto;
+  text-align: left;
 }
 
 .log p {
-  opacity: .8;
+  opacity: .6;
+  font-size: larger;
 }
 
-.active {
-  opacity: 1 !important;
+.log > :last-child {
+  opacity: 1;
 }
