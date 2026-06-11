@@ -163,12 +163,14 @@ export class GameState {
     COMBATLOG.scrollTop = COMBATLOG.scrollHeight;
   }
 
-  generateGrid(character, difficulty, map) {
+  generateGrid(character, difficulty, map, playerName) {
     this.gridContainer = document.querySelector(".grid-container");
     if (!this.gridContainer) {
       console.error("Grid container not found!");
       return;
     }
+    const nameLocation = document.getElementById('player-name');
+    nameLocation.textContent = playerName;
     var walls = [];
     switch (map) {
       case "forest":
@@ -386,6 +388,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const character = urlParams.get("character");
   const difficulty = urlParams.get("difficulty");
+  const playerName = urlParams.get("name");
   const path = window.location.pathname;
   const mapName = path.slice(path.lastIndexOf("/") + 1).slice(0, -5);
   let rows = 0;
@@ -402,7 +405,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   GAMESTATE.rows = rows;
   GAMESTATE.cols = cols;
-  GAMESTATE.generateGrid(character, difficulty, mapName);
+  GAMESTATE.generateGrid(character, difficulty, mapName, playerName);
 
   const moveBtn = document.getElementById("moveBtn");
   const attackBtn = document.getElementById("attackBtn");

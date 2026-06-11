@@ -1,17 +1,51 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  } 100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  } 100% {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 2s ease-in-out forwards;
+}
+
+.fade-out {
+  opacity: 1;
+  animation: fadeOut 1s ease-in-out forwards;
+}
+
+#story-text {
+  text-shadow: none;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+}
+
 body {
   font-family: var(--font-primary);
   font-weight: normal;
-  background-color: var(--background-color);
+  background-image: url('../assets/maps/Papyrus.jpg');
   margin: 0;  
   padding: 20px;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
 h1 {
   font-family: var(--font-primary);
+  color: var(--text-primary);
   font-weight: bold;
   font-size: 4.5rem;
-  text-shadow: 2px 2px black;
+  text-shadow: 3px 3px black;
 }
 
 p {
@@ -20,7 +54,25 @@ p {
   text-shadow: 2px 2px black;
 }
 
+span {
+  font-weight: bold;
+  font-size: 3rem;
+  color: var(--text-primary);
+  text-shadow: 2px 2px black;
+}
+
 label {
+  font-size: 2.5rem;
+}
+
+input[type="text"] {
+  width: 15%;
+  padding: 10px;
+  background-color: var(--parchment-color);
+  border-radius: 5px;
+  border: 2px solid var(--background-color);
+  font-family: "papyrus";
+  font-weight: bold;
   font-size: 2rem;
 }
 
@@ -37,6 +89,10 @@ button {
   text-shadow: 2px 2px black;
   background-color: var(--parchment-color);
   border-radius: 7px;
+}
+
+.rewrite-button {
+  width: fit-content;
 }
 
 .selecter {
@@ -89,8 +145,8 @@ input[type=radio] + label img {
 }
 
 input[type=radio]:checked + label img {
-  border-color: whitesmoke;
-  box-shadow: 0 0 10px rgba(220,220,220,0.5);
+  border-color: var(--background-color);
+  box-shadow: 0 0 10px whitesmoke;
 }
 
 footer {
@@ -101,4 +157,8 @@ footer {
 
 footer a {
   color: lightgray;
+}
+
+.hidden {
+  display: none;
 }

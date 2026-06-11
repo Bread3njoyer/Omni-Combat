@@ -1,48 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- Most of this was pulled form the "html-5 boilerplate" extension -->
-    <meta charset="utf-8">
-    <link rel="icon" href="./src/assets/Tarrasque_favicon.ico" />
-    <title>Tokens & Tarrasques</title>
-    <meta name="description" content="A turn-based combat game where players can choose from three different character classes, battle maps, and difficulties. The game boasts several enemy types, each trying to overcome the player.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./src/styles/styles.css">
-    <link rel="stylesheet" href="./src/styles/constants.css">
-  </head>
-  <body>
-    <div class="container">
-      <div class="heading">
-        <h1>Tokens & Tarrasques</h1>
-      </div>
-        <br>
-        
-      <div class="selecter">
-        <p>Choose your character:   </p>
-        <form class="character-select" id="character-select">
-          <!-- This is the first choice container, this is for the character selection -->
-          <!-- I'm not sure the div class="character-card" is necessary for each of the inputs and labels-->
-          <div class="options-container">
-            <div class="character-card">
-              <input type="radio" name="character" id="wizard_icon" value="wizard">
-              <label for="wizard_icon"><img src="./src/assets/characters/Wizard.png" alt="Wizard Icon">Wizard</label>
-            </div>
-            <div class="character-card">
-              <input type="radio" name="character" id="fighter_icon" value="fighter">
-              <label for="fighter_icon"><img src="./src/assets/characters/Fighter.png" alt="Fighter Icon">Fighter</label> 
-            </div>
-            <div class="character-card">
-              <input type="radio" name="character" id="ranger_icon" value="ranger">
-              <label for="ranger_icon"><img src="./src/assets/characters/Ranger.png" alt="Ranger Icon">Ranger</label>  
-            </div>
+
+<head>
+  <!-- Most of this was pulled form the "html-5 boilerplate" extension -->
+  <meta charset="utf-8">
+  <link rel="icon" href="./src/assets/Tarrasque_favicon.ico" />
+  <title>Tokens & Tarrasques</title>
+  <meta name="description"
+    content="A turn-based combat game where players can choose from three different character classes, battle maps, and difficulties. The game boasts several enemy types, each trying to overcome the player.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./src/styles/styles.css">
+  <link rel="stylesheet" href="./src/styles/constants.css">
+</head>
+
+<body>
+  <div class="container fade-in" id="start">
+    <h1>Hey you, you're finally awake...</h1>
+    <button class="who-button" id="whoBtn">Who Are You?</button>
+  </div>
+  <div class="container hidden" id="who">
+    <label for="player-name">What is Your Name?</label>
+    <input type="text" id="player-name">
+    <span>And what is it you are?</span>
+    <div class="selecter">
+      <form class="character-select" id="character-select">
+        <div class="options-container">
+          <div class="character-card">
+            <input type="radio" name="character" id="wizard_icon" value="wizard">
+            <label for="wizard_icon"><img src="./src/assets/characters/Wizard.png" alt="Wizard Icon">A Wizard</label>
           </div>
-        </form>
-      </div>
-      <!-- This will be the next choice container, this will be for map selection -->
-      <div class="selecter">
-      <p>Choose your map:   </p>
+          <div class="character-card">
+            <input type="radio" name="character" id="fighter_icon" value="fighter">
+            <label for="fighter_icon"><img src="./src/assets/characters/Fighter.png" alt="Fighter Icon">A
+              Fighter</label>
+          </div>
+          <div class="character-card">
+            <input type="radio" name="character" id="ranger_icon" value="ranger">
+            <label for="ranger_icon"><img src="./src/assets/characters/Ranger.png" alt="Ranger Icon">A Ranger</label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <button class="next-button" id="whoNextBtn">Next Page →</button>
+  </div>
+  <div class="container hidden" id="where">
+    <span>And where do you wake up?</span>
+    <div class="selecter">
       <form class="map-select" id="map-select">
-        <div class = "options-container">
+        <div class="options-container">
           <div class="map-card">
             <input type="radio" name="map" id="forest_icon" value="forest">
             <label for="forest_icon"><img src="./src/assets/Forest_icon.png" alt="Forest Icon">Forest</label>
@@ -57,34 +62,38 @@
           </div>
         </div>
       </form>
-      </div>
-      <!-- This will be the final choice container, this will be for difficulty selection -->
-      <div class="selecter">
-      <p>Choose your difficulty:   </p>
+    </div>
+    <button class="next-button" id="whereNextBtn">Next Page →</button>
+  </div>
+  <div class="container hidden" id="how">
+    <span>And will you survive?</span>
+    <div class="selecter">
       <form class="difficulty-select" id="difficulty-select">
-        <div class = "options-container">
+        <div class="options-container">
           <div class="difficulty-card">
             <input type="radio" name="difficulty" id="loot_farm_icon" value="loot_farm">
-            <label for="loot_farm_icon"><img src="./src/assets/Loot_farm_icon.png" alt="Loot Farm Icon">Loot Farm</label>
+            <label for="loot_farm_icon"><img src="./src/assets/Loot_farm_icon.png" alt="Loot Farm Icon">The fight will be easy enough</label>
           </div>
           <div class="difficulty-card">
             <input type="radio" name="difficulty" id="dungeon_icon" value="dungeon">
-            <label for="dungeon_icon"><img src="./src/assets/Dungeon_icon.png" alt="Dungeon Icon">Dungeon</label>
+            <label for="dungeon_icon"><img src="./src/assets/Dungeon_icon.png" alt="Dungeon Icon">The battle will be a challenge</label>
           </div>
           <div class="difficulty-card">
             <input type="radio" name="difficulty" id="tpk_icon" value="tpk">
-            <label for="tpk_icon"><img src="./src/assets/TPK_icon.png" alt="TPK Icon">TPK 💀</label>
+            <label for="tpk_icon"><img src="./src/assets/TPK_icon.png" alt="TPK Icon">If I live, it will be a miracle</label>
           </div>
         </div>
       </form>
-      </div> 
-    <button class="start-button" id="start-button">Start Game</button>
     </div>
-    <footer>
-      <a href="https://www.flaticon.com/free-icons/cave" title="cave icons">Cave icon created by Freepik - Flaticon</a>
-      <a href="https://www.flaticon.com/free-icons/colosseum" title="Colosseum icons">Colosseum icon created by pmicon - Flaticon</a>
-      <a href="https://www.flaticon.com/free-icons/forest" title="forest icons">Forest icon created by Smashicons - Flaticon</a>
-    </footer>
-    <script src="./src/scripts/scripts.js" defer></script>
-  </body>
+    <button class="next-button" id="howNextBtn">Next Page →</button>
+  </div>
+  <div class="container hidden" id="end">
+    <h1>Your Story</h1>
+    <p id="story-text"></p>
+    <button class="start-button" id="startBtn">Start Game</button>
+    <button class="rewrite-button" id="rewriteBtn">Rewrite Your History?</button>
+  </div>
+  <script src="./src/scripts/scripts.js" defer></script>
+</body>
+
 </html>
